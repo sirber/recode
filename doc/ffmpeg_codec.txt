@@ -1,0 +1,5 @@
+v: x264: libx264
+v: vp8: libvpx
+a: aac: libvo_aacenc 
+a: vorbis: libvorbis
+a: opus: libopus

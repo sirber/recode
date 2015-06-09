@@ -1,0 +1,66 @@
+20120325:
+* updated: handbrake cli (5358svn-x86_64)
+* removed: ffmpeg2theora
+
+20121007:
+* fixed: hardsub
+
+20120710:
+* updated: handbrake cli (4821svn-x86_64)
+* updated: ffmpeg2theora (0.29)
+
+20120514:
+* added: preset PC (MKV): h264
+* added: preset PC (MP4): h264
+* added: preset PC (OGG): theora
+* added: preset Phone (MP4): h264 baseline
+* removed: container choice
+
+20120502:
+* added: theora using ffmpeg2theora (for html5 video comptability)
+* added: container: OGV (ogg)
+* added: filtering: for ffmpeg2theora
+* removed: theora using handbrake
+* known issue: ffmpeg2theora's realtime logs isn't much realtime :)
+
+20120416:
+* fixed: added quote to protect gui exe path
+* fixed: force theora to use container matroska
+* added: chapters markers, if source has them
+* added: filtering: video resize
+* added: auto rename if source exists
+
+20120413:
+* fixed: missing quotation mark in the commandline
+* added: hint on audio codec combobox
+* added: help tab, text will come later :)
+* added: debug tab, to see the commandlines
+* added: mp4: Optimize mp4 files for HTTP streaming, 
+* added: mp4: Mark mp4 files so 5.5G iPods will accept them
+
+20120412:
+** defect **
+* added: writable "audio codec" combobox, for multi-track
+* added: container choice (matroska, mp4)
+
+20120330:
+* added: filtering: denoise, deblock
+* added: menus to clear file list
+
+20120329:
+* added: codecs: AAC, MP3
+* added: x264 profile
+* added: hints on most settings
+* added: form's control interactions
+* added: status on "finished" and "stop"
+
+20120328:
+* initial release
+* platform: win64
+* added: codecs: x264, theora, vorbis
+* added: video: 2 pass VBR mode
+* added: subtitles
+* added: x264 preset, x264 tune
+* added: files drag&drop
+* added: async process manager
+* added: form 2 commandline
