@@ -38,11 +38,10 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="7">
+    <Units Count="8">
       <Unit0>
         <Filename Value="recode.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="1"/>
         <CursorPos X="49" Y="14"/>
         <UsageCount Value="52"/>
         <Loaded Value="True"/>
@@ -54,10 +53,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit1"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="75"/>
-        <CursorPos X="33" Y="97"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="76"/>
+        <CursorPos X="20" Y="86"/>
         <UsageCount Value="52"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="C:\lazarus\lcl\masks.pas"/>
@@ -85,24 +87,26 @@
       </Unit5>
       <Unit6>
         <Filename Value="C:\lazarus\components\sqlite\registersqlite3.pas"/>
-        <UnitName Value="registersqlite3"/>
-        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="-1"/>
         <UsageCount Value="12"/>
-        <Loaded Value="True"/>
       </Unit6>
+      <Unit7>
+        <Filename Value="unit1.lfm"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="64" Y="13"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="LFM"/>
+      </Unit7>
     </Units>
-    <JumpHistory Count="3" HistoryIndex="2">
+    <JumpHistory Count="2" HistoryIndex="1">
       <Position1>
         <Filename Value="recode.lpr"/>
         <Caret Line="18" Column="41"/>
       </Position1>
       <Position2>
-        <Filename Value="C:\lazarus\components\sqlite\registersqlite3.pas"/>
-      </Position2>
-      <Position3>
         <Filename Value="recode.lpr"/>
         <Caret Line="20"/>
-      </Position3>
+      </Position2>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 796
+  Left = 1030
   Height = 436
-  Top = 171
+  Top = 130
   Width = 508
   AllowDropFiles = True
   BorderIcons = [biSystemMenu, biMinimize]
@@ -3130,7 +3130,7 @@ object Form1: TForm1
   OnCreate = FormCreate
   OnDropFiles = FormDropFiles
   Position = poScreenCenter
-  LCLVersion = '1.2.4.0'
+  LCLVersion = '1.4.4.0'
   object StatusBar1: TStatusBar
     Left = 0
     Height = 23
@@ -3152,8 +3152,8 @@ object Form1: TForm1
     Height = 400
     Top = 8
     Width = 496
-    ActivePage = Settings
-    TabIndex = 2
+    ActivePage = Status
+    TabIndex = 0
     TabOrder = 1
     object Status: TTabSheet
       Caption = 'Status'
@@ -3197,7 +3197,7 @@ object Form1: TForm1
         Top = 8
         Width = 480
         Caption = 'Files to encode'
-        ClientHeight = 278
+        ClientHeight = 276
         ClientWidth = 476
         TabOrder = 0
         object lstFiles: TListBox
@@ -3216,7 +3216,7 @@ object Form1: TForm1
         Top = 312
         Width = 481
         Caption = 'Destination folder'
-        ClientHeight = 39
+        ClientHeight = 37
         ClientWidth = 477
         TabOrder = 1
         object txtDestination: TEdit
@@ -3247,7 +3247,7 @@ object Form1: TForm1
         Top = 8
         Width = 232
         Caption = 'Video'
-        ClientHeight = 158
+        ClientHeight = 156
         ClientWidth = 228
         TabOrder = 0
         object cboVCodec: TComboBox
@@ -3392,7 +3392,7 @@ object Form1: TForm1
         Top = 184
         Width = 233
         Caption = 'Audio'
-        ClientHeight = 94
+        ClientHeight = 92
         ClientWidth = 229
         TabOrder = 1
         object cboACodec: TComboBox
@@ -3465,7 +3465,7 @@ object Form1: TForm1
           Left = 7
           Height = 15
           Top = 71
-          Width = 37
+          Width = 36
           Caption = 'Tracks:'
           ParentColor = False
         end
@@ -3476,14 +3476,14 @@ object Form1: TForm1
         Top = 8
         Width = 233
         Caption = 'Subtitle'
-        ClientHeight = 63
+        ClientHeight = 61
         ClientWidth = 229
         TabOrder = 2
         object Label10: TLabel
           Left = 7
           Height = 15
           Top = 7
-          Width = 37
+          Width = 36
           Caption = 'Tracks:'
           ParentColor = False
         end
@@ -3517,7 +3517,7 @@ object Form1: TForm1
         Top = 96
         Width = 233
         Caption = 'Filtering'
-        ClientHeight = 94
+        ClientHeight = 92
         ClientWidth = 229
         TabOrder = 3
         object chkFDenoise: TCheckBox
@@ -3608,7 +3608,7 @@ object Form1: TForm1
         Top = 216
         Width = 233
         Caption = 'Advanced'
-        ClientHeight = 62
+        ClientHeight = 60
         ClientWidth = 229
         TabOrder = 4
         object chkOpenCL: TCheckBox
