@@ -1,0 +1,8 @@
+todo:
+
+review audio management
+- default track
+
+review subtitle management
+- burned track
+- default track
