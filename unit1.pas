@@ -361,13 +361,19 @@ procedure TForm1.cboVCodecChange(Sender: TObject);
 begin
   // x264 specific
   case cboVCodec.ItemIndex of
-    0,2: // x264, x265
+    0: // x264
     begin
       cboVPreset.Enabled := true;
       cboVTune.Enabled := true;
       cboVProfile.Enabled := true;
     end;
-    1,3: // Theora, vp8
+    1: // x265
+    begin
+      cboVPreset.Enabled := true;
+      cboVTune.Enabled := false;
+      cboVProfile.Enabled := false;
+    end;
+    2,3: // vp8, mpeg4
     begin
       cboVPreset.Enabled := false;
       cboVTune.Enabled := false;
