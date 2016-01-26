@@ -36,7 +36,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "recode.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\HandBrakeCLI.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "sqlite3.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "bin\HandBrakeCLI.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

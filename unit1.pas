@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, IBConnection, FileUtil, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ComCtrls, AsyncProcess, Menus;
+  StdCtrls, ComCtrls, AsyncProcess, Menus, LCLIntf, LazFileUtils;
 
 type
 
@@ -16,6 +16,7 @@ type
     cboVProfile: TComboBox;
     cboVTune: TComboBox;
     cboVDenoise: TComboBox;
+    CheckBox1: TCheckBox;
     chkDXVA2: TCheckBox;
     chkOpenCL: TCheckBox;
     chkFResize: TCheckBox;
@@ -24,6 +25,8 @@ type
     chkSBurn: TCheckBox;
     GroupBox4: TGroupBox;
     Label12: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
     txtFHResize: TEdit;
     txtFWResize: TEdit;
     GroupBox3: TGroupBox;
@@ -76,13 +79,16 @@ type
     procedure cmdStopClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDropFiles(Sender: TObject; const FileNames: array of String);
+    procedure Label13Click(Sender: TObject);
+    procedure Label14Click(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
     procedure oProcessReadData(Sender: TObject);
     procedure oProcessTerminate(Sender: TObject);
   private
     { private declarations }
-    procedure encode_start(sFile: string; sCmdLine: string);
+    encoder: string;
+    procedure encode_start(sFile: string; sParameters: TStrings);
     procedure addLog(sMessage: string);
     procedure updateStatus(sStatus: string);
     function makeOutput(sFile: string):string;
@@ -94,7 +100,7 @@ var
   Form1: TForm1;
 
 const
-  sVersion: string = '2014-10-05 x64 dev';
+  sVersion: string = '2016-01-26 x64 dev';
 
 implementation
 
@@ -117,6 +123,17 @@ begin
   addLog(Form1.Text);
   memoAbout.Lines.Text := StringReplace(memoAbout.Lines.Text, '{version}', sVersion, [rfIgnoreCase]);   ;
 
+  { Find Handbreak CLI}
+  encoder := 'C:\Program Files\Handbrake\HandBrakeCLI.exe';
+  if (FileExists(encoder)) then
+  begin
+    AddLog('- Handbreak CLI detected.');
+  end
+  else
+  begin
+    AddLog('- Handbreak CLI not found. Please install Handbrerak.');
+  end;
+
   PageControl1.TabIndex:=0;
 end;
 
@@ -124,11 +141,8 @@ end;
 procedure TForm1.cmdStartClick(Sender: TObject);
 var
   sFile: string;
-  sACodec: string;
-  iEncoder: integer;
-  bPP: boolean;
-  sCli: string;
   sCmdLine: string;
+  sParameters: TStrings;
 begin
   if (lstFiles.Items.Count = 0) then
   begin
@@ -136,7 +150,8 @@ begin
     updateStatus('done');
     Exit;
   end;
-  bPP := false;
+
+  sParameters := TStringList.Create;
 
   cmdStop.Enabled:=true;
   cmdStart.Enabled:=false;
@@ -144,150 +159,105 @@ begin
   { make cmdline }
   sFile := lstFiles.Items.Strings[0];
 
-  { detect encoder to use }
-  iEncoder := 0; // handbrake
+  { input / output }
+  sParameters.Add('-i');
+  sParameters.Add('"' + sFile + '"');
 
-  { pass control }
-  case iEncoder of
-    0: // handbrake
+  {video}
+  case cboVCodec.ItemIndex of
+    0: // x264
     begin
-      { encoder }
-      sCmdLine := '"' + ExtractFilePath(Application.ExeName) + 'bin/HandBrakeCLI.exe" ';
-
-      { input / output }
-      sCmdLine := sCmdLine + '-i "' + sFile + '" ';
-
-      {video}
-      case cboVCodec.ItemIndex of
-        0: // x264
-        begin
-          sCmdLine := sCmdLine + '-e x264 ';
-          sCmdLine := sCmdLine + '--encoder-preset ' + cboVPreset.Items.Strings[cboVPreset.ItemIndex] + ' ';
-          sCmdLine := sCmdLine + '--encoder-tune ' + cboVTune.Items.Strings[cboVTune.ItemIndex] + ' ';
-          sCmdLine := sCmdLine + '--encoder-profile ' + cboVProfile.Items.Strings[cboVProfile.ItemIndex] + ' ';
-          sCmdLine := sCmdLine + '-2 -T '; // 2-pass, Turbo first pass
-        end;
-        1: // theora
-        begin
-          sCmdLine := sCmdLine + '-e theora ';
-        end;
-        2: // x265
-        begin
-          sCmdLine := sCmdLine + '-e x265 ';
-          sCmdLine := sCmdLine + '--encoder-preset ' + cboVPreset.Items.Strings[cboVPreset.ItemIndex] + ' ';
-          sCmdLine := sCmdLine + '--encoder-tune ' + cboVTune.Items.Strings[cboVTune.ItemIndex] + ' ';
-          sCmdLine := sCmdLine + '--encoder-profile ' + cboVProfile.Items.Strings[cboVProfile.ItemIndex] + ' ';
-          sCmdLine := sCmdLine + '-2 -T '; // 2-pass, Turbo first pass
-        end;
-        3: // vp8
-        begin
-          sCmdLine := sCmdLine + '-e vp8 ';
-        end;
-        4: // mpeg4
-        begin
-          sCmdLine := sCmdLine + '-e mpeg4 ';
-        end;
-      end;
-
-      { settings / codec / common}
-      sCmdLine := sCmdLine + '-b ' + txtVBitrate.Text + ' ';
-
-      { advanced }
-      if (chkOpenCL.Checked) then sCmdLine := sCmdLine + '--use-opencl ';
-      if (chkDXVA2.Checked) then sCmdLine := sCmdLine + '--use-hwd ';
-
-      {output}
-      sCmdLine := sCmdLine + '-o "' + makeOutput(sFile) + '" ';
-
-      { audio }
-      case cboACodec.ItemIndex of
-        0: sACodec := 'vorbis'; // vorbis
-        1: sACodec := 'ffaac'; // aac
-        2: sACodec := 'lame'; // mp3
-      end;
-      sCmdLine := sCmdLine + '-E ' + sACodec + ' ';;
-      sCmdLine := sCmdLine + '-a ' + txtATrack.Text + ' ';
-      sCmdLine := sCmdLine + '-B ' + txtABitrate.Text + ' ';
-
-      { subtitle }
-      if (strlen(pchar(txtSTrack.Text)) > 0) then
-      begin
-        sCmdLine := sCmdLine + '-s ' + txtSTrack.Text + ' ';
-        if (chkSBurn.Checked) then
-           sCmdLine := sCmdLine + '--subtitle-burn ';
-      end;
-
-      { filtering }
-      if (chkFDenoise.Checked) then
-        sCmdLine := sCmdLine + '--denoise ' + cboVDenoise.Items.Strings[cboVDenoise.ItemIndex] + ' ';
-      if (chkFDeblock.Checked) then
-        sCmdLine := sCmdLine + '--deblock ';
-      if (chkFResize.Checked) then
-      begin
-        if (Length(txtFWResize.Text) > 0) then
-          sCmdLine := sCmdLine + '--width ' + txtFWResize.Text + ' ';
-        if (Length(txtFHResize.Text) > 0) then
-          sCmdLine := sCmdLine + '--height ' + txtFHResize.Text + ' ';
-      end;
+      sParameters.Add('-e');
+      sParameters.Add('x264');
+      sParameters.Add('--encoder-preset');
+      sParameters.Add(cboVPreset.Items.Strings[cboVPreset.ItemIndex]);
+      sParameters.Add('--encoder-tune');
+      sParameters.Add(cboVTune.Items.Strings[cboVTune.ItemIndex]);
+      sParameters.Add('--encoder-profile');
+      sParameters.Add(cboVProfile.Items.Strings[cboVProfile.ItemIndex]);
+      sParameters.Add('-2'); // 2-pass
+      sParameters.Add('-T'); // turbo first pass
     end;
-
-    1: // ffmpeg2theora
+    1: // x265
     begin
-      { encoder }
-      sCmdLine := '"' + ExtractFilePath(Application.ExeName) + 'bin/ffmpeg2theora/ffmpeg2theora.exe" ';
-      { output }
-      sCmdLine := sCmdLine + '-o "' + makeOutput(sFile) + '" ';
-      { setings video}
-      sCmdLine := sCmdLine + '-V ' + txtVBitrate.Text + ' ';
-      sCmdLine := sCmdLine + '--soft-target --two-pass --optimize ';
-      { audio }
-      sCmdLine := sCmdLine + '-A ' + txtABitrate.Text + ' ';
-
-      { filtering }
-      if (chkFDenoise.Checked) then
-      begin
-        if (bPP = false) then
-        begin
-          sCmdLine := sCmdLine + '--pp "';
-          bPP:= true;
-        end;
-        sCmdLine := sCmdLine + 'tn:64:128:256';
-      end;
-      if (chkFDeblock.Checked) then
-      begin
-        if (bPP = false) then
-        begin
-          sCmdLine := sCmdLine + '--pp "';
-          bPP:= true;
-        end
-        else
-          sCmdLine := sCmdLine + ',';
-        sCmdLine := sCmdLine + 'vb:a,hb:a';
-      end;
-      if (bPP) then
-        sCmdLine := sCmdLine + '"';
-      sCmdLine := sCmdLine + ' ';
-
-      if (chkFResize.Checked) then
-      begin
-        if (Length(txtFWResize.Text) > 0) then
-          sCmdLine := sCmdLine + '--width ' + txtFWResize.Text + ' ';
-        if (Length(txtFHResize.Text) > 0) then
-          sCmdLine := sCmdLine + '--height ' + txtFHResize.Text + ' ';
-      end;
-
-      { input }
-      sCmdLine := sCmdLine + ' "' + sFile + '" ';
+      sParameters.Add('-e');
+      sParameters.Add('x264');
+      sParameters.Add('--encoder-preset');
+      sParameters.Add(cboVPreset.Items.Strings[cboVPreset.ItemIndex]);
+      sParameters.Add('--encoder-tune');
+      sParameters.Add(cboVTune.Items.Strings[cboVTune.ItemIndex]);
+      sParameters.Add('--encoder-profile');
+      sParameters.Add(cboVProfile.Items.Strings[cboVProfile.ItemIndex]);
+      sParameters.Add('-2'); // 2-pass
+      sParameters.Add('-T'); // turbo first pass
+    end;
+    2: // vp8
+    begin
+      sParameters.Add('-e');
+      sParameters.Add('vp8');
+    end;
+    3: // mpeg4
+    begin
+      sParameters.Add('-e');
+      sParameters.Add('mpeg4');
     end;
   end;
 
-  { Fix}
-  sCmdLine := StringReplace(sCmdLine, '\\', '\', [rfIgnoreCase]);
+  { settings / codec / common}
+  sParameters.Add('-b');
+  sParameters.Add(txtVBitrate.Text);
 
-  mmoHelp.Append(sCmdLine);
+  { advanced }
+  if (chkOpenCL.Checked) then sParameters.Add('--use-opencl');
+  if (chkDXVA2.Checked) then sParameters.Add('--use-hwd');
+  if (chkDXVA2.Checked <> false) then sParameters.Add('--disable-qsv-decoding');
+
+  {output}
+  sParameters.Add('-o');
+  sParameters.Add('"' + makeOutput(sFile) + '"');
+
+  { audio }
+  sParameters.Add('-E');
+  sParameters.Add(cboACodec.Text);
+  sParameters.Add('-a');
+  sParameters.Add(txtATrack.Text);
+  sParameters.Add('-B');
+  sParameters.Add(txtABitrate.Text);
+
+  { subtitle }
+  if (strlen(pchar(txtSTrack.Text)) > 0) then
+  begin
+    sParameters.Add('-s');
+    sParameters.Add(txtSTrack.Text);
+    sCmdLine := sCmdLine + '-s ' + txtSTrack.Text + ' ';
+    if (chkSBurn.Checked) then
+       sParameters.Add('--subtitle-burn');
+  end;
+
+  { filtering }
+  if (chkFDenoise.Checked) then
+  begin
+    sParameters.Add('--denoise');
+    sParameters.Add(cboVDenoise.Items.Strings[cboVDenoise.ItemIndex]);
+  end;
+  if (chkFDeblock.Checked) then
+    sParameters.Add('--deblock');
+  if (chkFResize.Checked) then
+  begin
+    if (Length(txtFWResize.Text) > 0) then
+    begin
+      sParameters.Add('--width');
+      sParameters.Add(txtFWResize.Text);
+    end;
+    if (Length(txtFHResize.Text) > 0) then
+    begin
+      sParameters.Add('--height');
+      sParameters.Add(txtFHResize.Text);
+    end;
+  end;
 
   { start }
-  encode_start(sFile, sCmdLine);
+  encode_start(sFile, sParameters);
 end;
 
 function TForm1.makeOutput(sFile: string):string;
@@ -357,6 +327,16 @@ begin
   PageControl1.TabIndex:=1;
 end;
 
+procedure TForm1.Label13Click(Sender: TObject);
+begin
+  OpenURL('https://github.com/sirber/recode');
+end;
+
+procedure TForm1.Label14Click(Sender: TObject);
+begin
+  OpenURL('https://paypal.me/sirber');
+end;
+
 procedure TForm1.MenuItem1Click(Sender: TObject);
 begin
   if ((oProcess.Active) and (lstFiles.ItemIndex = 0)) then
@@ -421,8 +401,9 @@ procedure TForm1.cboACodecChange(Sender: TObject);
 begin
   case cboACodec.ItemIndex of
     0: txtABitrate.Text:='64';
-    1: txtABitrate.Text:='64';
-    2: txtABitrate.Text:='96';
+    1: txtABitrate.Text:='96';
+    2: txtABitrate.Text:='64';
+    3: txtABitrate.Text:='128';
   end;
   txtATrack.Text := '1';
 end;
@@ -430,10 +411,12 @@ end;
 { About }
 
 {*** ENCODING ***}
-procedure TForm1.encode_start(sFile: string; sCmdLine: string);
+procedure TForm1.encode_start(sFile: string; sParameters: TStrings);
 begin
   addLog('Encoding: ' + ExtractFileNameOnly(sFile));
-  oProcess.CommandLine:=sCmdLine;
+  oProcess.Executable:=encoder;  // global
+  oProcess.Parameters:=sParameters;
+
   oProcess.Execute;
 end;
 
@@ -470,3 +453,4 @@ end;
 
 
 end.
+

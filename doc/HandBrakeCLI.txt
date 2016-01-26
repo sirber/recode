@@ -10,7 +10,7 @@ Syntax: HandBrakeCLI [options] -i <device> -o <file>
                             double quotation marks
     -z, --preset-list       See a list of available built-in presets
         --no-dvdnav         Do not use dvdnav for reading DVDs
-                            (experimental, enabled by default for testing)
+    --no-opencl             Disable use of OpenCL
 
 ### Source Options-----------------------------------------------------------
 
@@ -24,8 +24,8 @@ Syntax: HandBrakeCLI [options] -i <device> -o <file>
     -c, --chapters <string> Select chapters (e.g. "1-3" for chapters
                             1 to 3, or "3" for chapter 3 only,
                             default: all chapters)
-        --angle <number>    Select the DVD angle
-        --previews <#:B>    Select how many preview images are generated (max 30),
+        --angle <number>    Select the video angle (DVD or Blu-ray only)
+        --previews <#:B>    Select how many preview images are generated,
                             and whether or not they're stored to disk (0 or 1).
                             (default: 10:0)
     --start-at-preview <#>  Start encoding at a given preview.
@@ -36,42 +36,43 @@ Syntax: HandBrakeCLI [options] -i <device> -o <file>
 ### Destination Options------------------------------------------------------
 
     -o, --output <string>   Set output file name
-    -f, --format <string>   Set output format (mp4/mkv, default:
-                            autodetected from file name)
-    -m, --markers           Add chapter markers (mp4 and mkv output formats only)
-    -4, --large-file        Use 64-bit mp4 files that can hold more than
-                            4 GB. Note: Breaks iPod, PS3 compatibility.
-    -O, --optimize          Optimize mp4 files for HTTP streaming
+    -f, --format <string>   Set output container format (av_mp4/av_mkv)
+                            (default: autodetected from file name)
+    -m, --markers           Add chapter markers
+    -O, --optimize          Optimize mp4 files for HTTP streaming ("fast start")
     -I, --ipod-atom         Mark mp4 files so 5.5G iPods will accept them
+    -P, --use-opencl        Use OpenCL where applicable
+    -U, --use-hwd           Use DXVA2 hardware decoding
 
 ### Video Options------------------------------------------------------------
 
     -e, --encoder <string>  Set video library encoder
-                            Options: x264/ffmpeg4/ffmpeg2/theora
-                            (default: ffmpeg4)
-        --x264-preset       When using x264, selects the x264 preset:
-          <string>          ultrafast/superfast/veryfast/faster/fast/
-                            medium/slow/slower/veryslow/placebo
-        --x264-tune         When using x264, selects the x264 tuning:
-          <string>          film/animation/grain/stillimage/psnr/ssim/
-                            fastdecode/zerolatency
-    -x, --encopts <string>  Specify advanced encoder options in the
-                            same style as mencoder (x264 and ffmpeg only):
+                            Options: x264/qsv_h264/x265/mpeg4/mpeg2/VP8/theora
+                            (default: mpeg4)
+        --encoder-preset    Adjust video encoding settings for a particular
+          <string>          speed/efficiency tradeoff (encoder-specific)
+    --encoder-preset-list   List supported --encoder-preset values for the
+          <string>          specified video encoder
+        --encoder-tune      Adjust video encoding settings for a particular
+          <string>          type of souce or situation (encoder-specific)
+    --encoder-tune-list     List supported --encoder-tune values for the
+          <string>          specified video encoder
+    -x, --encopts <string>  Specify advanced encoding options in the same
+                            style as mencoder (all encoders except theora):
                             option1=value1:option2=value2
-        --h264-profile      When using x264, ensures compliance with the
-          <string>          specified H.264 profile:
-                            auto/high/main/baseline
-        --h264-level        When using x264, ensures compliance with the
-          <string>          specified H.264 level:
-                            auto/1.0/1b/1.1/1.2/1.3/2.0/2.1/2.2/3.0/3.1/
-                            3.2/4.0/4.1/4.2/5.0/5.1/5.2
+        --encoder-profile   Ensures compliance with the requested codec
+          <string>          profile (encoder-specific)
+    --encoder-profile-list  List supported --encoder-profile values for the
+          <string>          specified video encoder
+        --encoder-level     Ensures compliance with the requested codec
+          <string>          level (encoder-specific)
+    --encoder-level-list    List supported --encoder-level values for the
+          <string>          specified video encoder
     -q, --quality <number>  Set video quality
     -b, --vb <kb/s>         Set video bitrate (default: 1000)
     -2, --two-pass          Use two-pass mode
-    -T, --turbo             When using 2-pass use the turbo options
-                            on the first pass to improve speed
-                            (only works with x264, affects PSNR by about 0.05dB,
-                            and increases first pass speed two to four times)
+    -T, --turbo             When using 2-pass use "turbo" options on the
+                            1st pass to improve speed (only works with x264)
     -r, --rate              Set video framerate (5/10/12/15/23.976/24/25/29.97/30/50/59.94/60)
                             Be aware that not specifying a framerate lets
                             HandBrake preserve a source's time stamps,
@@ -94,24 +95,27 @@ Syntax: HandBrakeCLI [options] -i <device> -o <file>
                              tracks, default: first one).
                             Multiple output tracks can be used for one input.
     -E, --aencoder <string> Audio encoder(s):
-                               faac
-                               ffaac
+                               av_aac
+                               fdk_aac
+                               fdk_haac
                                copy:aac
-                               ffac3
+                               ac3
                                copy:ac3
                                copy:dts
                                copy:dtshd
-                               lame
+                               mp3
                                copy:mp3
                                vorbis
-                               ffflac
-                               ffflac24
+                               flac16
+                               flac24
                                copy
                             copy:* will passthrough the corresponding
                             audio unmodified to the muxer if it is a
                             supported passthrough audio type.
                             Separated by commas for more than one audio track.
-                            (default: faac for mp4, lame for mkv)
+                            Defaults:
+                               av_mp4   av_aac
+                               av_mkv   mp3
         --audio-copy-mask   Set audio codecs that are permitted when the
                 <string>    "copy" audio encoder option is specified
                             (aac/ac3/dts/dtshd/mp3, default: all).
@@ -140,13 +144,14 @@ Syntax: HandBrakeCLI [options] -i <device> -o <file>
                                5_2_lfe
                             Separated by commas for more than one audio track.
                             Defaults:
-                               faac             up to dpl2
-                               ffaac            up to dpl2
-                               ffac3            up to 5point1
-                               lame             up to dpl2
+                               av_aac           up to dpl2
+                               fdk_aac          up to dpl2
+                               fdk_haac         up to dpl2
+                               ac3              up to 5point1
+                               mp3              up to dpl2
                                vorbis           up to dpl2
-                               ffflac           up to 7point1
-                               ffflac24         up to 7point1
+                               flac16           up to 7point1
+                               flac24           up to 7point1
         --normalize-mix     Normalize audio mix levels to prevent clipping.
                <string>     Separated by commas for more than one audio track.
                             0 = Disable Normalization (default)
@@ -163,7 +168,7 @@ Syntax: HandBrakeCLI [options] -i <device> -o <file>
                             amplify. A 1 dB difference is barely audible.
         --adither <string>  Apply dithering to the audio before encoding.
                             Separated by commas for more than one audio track.
-                            Only supported by some encoders (ffflac).
+                            Only supported by some encoders (fdk_aac/fdk_haac/flac16).
                             Options:
                                auto (default)
                                none
@@ -176,14 +181,14 @@ Syntax: HandBrakeCLI [options] -i <device> -o <file>
 
 ### Picture Settings---------------------------------------------------------
 
-    -w, --width <number>    Set picture width
+    -w, --width  <number>   Set picture width
     -l, --height <number>   Set picture height
-        --crop <T:B:L:R>    Set cropping values (default: autocrop)
-        --loose-crop        Always crop to a multiple of the modulus
-          <#>               Specifies the maximum number of extra pixels
+        --crop  <T:B:L:R>   Set cropping values (default: autocrop)
+        --loose-crop  <#>   Always crop to a multiple of the modulus
+                            Specifies the maximum number of extra pixels
                             which may be cropped (default: 15)
-    -Y, --maxHeight <#>     Set maximum height
-    -X, --maxWidth <#>      Set maximum width
+    -Y, --maxHeight   <#>   Set maximum height
+    -X, --maxWidth    <#>   Set maximum width
     --strict-anamorphic     Store pixel aspect ratio in video stream
     --loose-anamorphic      Store pixel aspect ratio with specified width
     --custom-anamorphic     Store pixel aspect ratio in video stream and
@@ -207,26 +212,42 @@ Syntax: HandBrakeCLI [options] -i <device> -o <file>
 
 ### Filters---------------------------------------------------------
 
-    -d, --deinterlace       Deinterlace video with yadif/mcdeint filter
-          <YM:FD:MM:QP>     (default 0:-1:-1:1)
+    -d, --deinterlace       Unconditionally deinterlaces all frames
+          <fast/slow/slower/bob/qsv> or omitted (default settings)
            or
-          <fast/slow/slower>
+          <YM:FD>           (default 0:-1)
     -5, --decomb            Selectively deinterlaces when it detects combing
+          <fast/bob> or omitted (default settings)
+           or
           <MO:ME:MT:ST:BT:BX:BY:MG:VA:LA:DI:ER:NO:MD:PP:FD>
           (default: 7:2:6:9:80:16:16:10:20:20:4:2:50:24:1:-1)
     -9, --detelecine        Detelecine (ivtc) video with pullup filter
                             Note: this filter drops duplicate frames to
                             restore the pre-telecine framerate, unless you
                             specify a constant framerate (--rate 29.97)
-          <L:R:T:B:SB:MP:FD>   (default 1:1:4:4:0:0:-1)
+          <L:R:T:B:SB:MP:FD> (default 1:1:4:4:0:0:-1)
     -8, --denoise           Denoise video with hqdn3d filter
-          <SL:SC:TL:TC>     (default 4:3:6:4.5)
+          <ultralight/light/medium/strong> or omitted (default settings)
            or
-          <weak/medium/strong>
+          <SL:SCb:SCr:TL:TCb:TCr>
+          (default: 4:3:3:6:4.5:4.5)
+    --nlmeans               Denoise video with nlmeans filter
+          <ultralight/light/medium/strong> or omitted
+           or
+          <SY:OTY:PSY:RY:FY:PY:Sb:OTb:PSb:Rb:Fb:Pb:Sr:OTr:PSr:Rr:Fr:Pr>
+          (default 8:1:7:3:2:0)
+    --nlmeans-tune          Tune nlmeans filter to content type
+                            Note: only works in conjunction with presets
+                            ultralight/light/medium/strong.
+          <none/film/grain/highmotion/animation> or omitted (default none)
     -7, --deblock           Deblock video with pp7 filter
           <QP:M>            (default 5:2)
-        --rotate            Flips images axes
-          <M>               (default 3)
+        --rotate     <mode> Rotate image or flip its axes.
+                            Modes: (can be combined)
+                               1 vertical flip
+                               2 horizontal flip
+                               4 rotate clockwise 90 degrees
+                            Default: 3 (vertical and horizontal flip)
     -g, --grayscale         Grayscale encoding
 
 ### Subtitle Options------------------------------------------------------------
@@ -274,18 +295,28 @@ Syntax: HandBrakeCLI [options] -i <device> -o <file>
                             subtitle track is used instead.
         --srt-file <string> SubRip SRT filename(s), separated by commas.
         --srt-codeset       Character codeset(s) that the SRT file(s) are
-          <string>          encoded in, separted by commas.
+          <string>          encoded in, separated by commas.
                             Use 'iconv -l' for a list of valid
-                            codesets. If not specified latin1 is assumed
-        --srt-offset        Offset in milli-seconds to apply to the SRT file(s)
-          <string>          separted by commas. If not specified zero is assumed.
+                            codesets. If not specified, 'latin1' is assumed
+        --srt-offset        Offset (in milliseconds) to apply to the SRT file(s),
+          <string>          separated by commas. If not specified, zero is assumed.
                             Offsets may be negative.
         --srt-lang <string> Language as an iso639-2 code fra, eng, spa et cetera)
-                            for the SRT file(s) separated by commas. If not specified
+                            for the SRT file(s), separated by commas. If not specified,
                             then 'und' is used.
         --srt-default       Flag the selected srt as the default subtitle
           <number>          to be displayed upon playback.  Setting no default
                             means no subtitle will be automatically displayed
                             If "number" is omitted, the first srt is default.
                             "number" is an 1 based index into the srt-file list
+        --srt-burn          "Burn" the selected srt subtitle into the video track
+          <number>          If "number" is omitted, the first srt is burned.
+                            "number" is an 1 based index into the srt-file list
+
+### Intel Quick Sync Video------------------------------------------------------
+
+    --disable-qsv-decoding  Force software decoding of the video track.
+    --qsv-async-depth       Specifies how many asynchronous operations should be
+                            performed before the result is explicitly synchronized.
+                            Default: 4. If zero, the value is not specified.
 

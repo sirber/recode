@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 1030
+  Left = 967
   Height = 436
-  Top = 130
+  Top = 165
   Width = 508
   AllowDropFiles = True
   BorderIcons = [biSystemMenu, biMinimize]
@@ -3130,7 +3130,7 @@ object Form1: TForm1
   OnCreate = FormCreate
   OnDropFiles = FormDropFiles
   Position = poScreenCenter
-  LCLVersion = '1.4.4.0'
+  LCLVersion = '1.6.0.2'
   object StatusBar1: TStatusBar
     Left = 0
     Height = 23
@@ -3152,8 +3152,8 @@ object Form1: TForm1
     Height = 400
     Top = 8
     Width = 496
-    ActivePage = Status
-    TabIndex = 0
+    ActivePage = Settings
+    TabIndex = 2
     TabOrder = 1
     object Status: TTabSheet
       Caption = 'Status'
@@ -3259,7 +3259,6 @@ object Form1: TForm1
           ItemIndex = 0
           Items.Strings = (
             'H264'
-            'Theora'
             'H265'
             'VP8'
             'MPEG4'
@@ -3402,11 +3401,12 @@ object Form1: TForm1
           Top = 0
           Width = 140
           ItemHeight = 15
-          ItemIndex = 0
+          ItemIndex = 2
           Items.Strings = (
+            'fdk_haac'
+            'fdk_aac'
             'vorbis'
-            'ffaac'
-            'lame'
+            'mp3'
             'copy'
           )
           OnChange = cboACodecChange
@@ -3604,11 +3604,11 @@ object Form1: TForm1
       end
       object GroupBox4: TGroupBox
         Left = 244
-        Height = 80
+        Height = 112
         Top = 216
         Width = 233
         Caption = 'Advanced'
-        ClientHeight = 60
+        ClientHeight = 92
         ClientWidth = 229
         TabOrder = 4
         object chkOpenCL: TCheckBox
@@ -3626,6 +3626,16 @@ object Form1: TForm1
           Width = 183
           Caption = 'Use DXVA2 hardware decoding'
           TabOrder = 1
+        end
+        object CheckBox1: TCheckBox
+          Left = 7
+          Height = 19
+          Top = 56
+          Width = 177
+          Caption = 'Use Intel QuickSync decoding'
+          Checked = True
+          State = cbChecked
+          TabOrder = 2
         end
       end
     end
@@ -3652,7 +3662,7 @@ object Form1: TForm1
       ClientWidth = 488
       object memoAbout: TMemo
         Left = 4
-        Height = 360
+        Height = 336
         Top = 8
         Width = 480
         Lines.Strings = (
@@ -3668,14 +3678,49 @@ object Form1: TForm1
           'Desired new file size: 50 MB file (~350kbps)'
           ''
           'Author: Stéphane Bérubé <sirber@detritus.qc.ca>'
-          'Copyright: 2012, Detritus Software'
+          'Copyright: 2012-2016, Detritus Software'
           ''
-          'Using: Handbrake CLI, ffmpeg2theora'
-          'Built with: Lazarus v1.1 (fpc 2.6.1) x64'
+          'Using: Handbrake CLI'
         )
         ReadOnly = True
         ScrollBars = ssAutoVertical
         TabOrder = 0
+      end
+      object Label13: TLabel
+        Cursor = crHandPoint
+        Left = 4
+        Height = 16
+        Top = 352
+        Width = 153
+        Caption = 'Project on GitHub'
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clBlue
+        Font.Height = -16
+        Font.Name = 'Courier'
+        Font.Pitch = fpFixed
+        Font.Quality = fqDraft
+        Font.Style = [fsUnderline]
+        ParentColor = False
+        ParentFont = False
+        OnClick = Label13Click
+      end
+      object Label14: TLabel
+        Cursor = crHandPoint
+        Left = 421
+        Height = 16
+        Top = 352
+        Width = 63
+        Caption = 'Donate!'
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clBlue
+        Font.Height = -16
+        Font.Name = 'Courier'
+        Font.Pitch = fpFixed
+        Font.Quality = fqDraft
+        Font.Style = [fsUnderline]
+        ParentColor = False
+        ParentFont = False
+        OnClick = Label14Click
       end
     end
   end
