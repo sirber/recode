@@ -181,7 +181,7 @@ begin
     1: // x265
     begin
       sParameters.Add('-e');
-      sParameters.Add('x264');
+      sParameters.Add('x265');
       sParameters.Add('--encoder-preset');
       sParameters.Add(cboVPreset.Items.Strings[cboVPreset.ItemIndex]);
       sParameters.Add('-2'); // 2-pass
