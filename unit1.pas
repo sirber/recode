@@ -184,12 +184,7 @@ begin
       sParameters.Add('x264');
       sParameters.Add('--encoder-preset');
       sParameters.Add(cboVPreset.Items.Strings[cboVPreset.ItemIndex]);
-      sParameters.Add('--encoder-tune');
-      sParameters.Add(cboVTune.Items.Strings[cboVTune.ItemIndex]);
-      sParameters.Add('--encoder-profile');
-      sParameters.Add(cboVProfile.Items.Strings[cboVProfile.ItemIndex]);
       sParameters.Add('-2'); // 2-pass
-      sParameters.Add('-T'); // turbo first pass
     end;
     2: // vp8
     begin
