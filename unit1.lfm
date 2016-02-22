@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 967
+  Left = 1033
   Height = 436
-  Top = 165
+  Top = 125
   Width = 508
   AllowDropFiles = True
   BorderIcons = [biSystemMenu, biMinimize]
@@ -3147,13 +3147,13 @@ object Form1: TForm1
       end>
     SimplePanel = False
   end
-  object PageControl1: TPageControl
+  object pages: TPageControl
     Left = 8
     Height = 400
     Top = 8
     Width = 496
-    ActivePage = Settings
-    TabIndex = 2
+    ActivePage = Nodes
+    TabIndex = 3
     TabOrder = 1
     object Status: TTabSheet
       Caption = 'Status'
@@ -3633,9 +3633,43 @@ object Form1: TForm1
           Top = 56
           Width = 177
           Caption = 'Use Intel QuickSync decoding'
-          Checked = True
-          State = cbChecked
           TabOrder = 2
+        end
+      end
+    end
+    object Nodes: TTabSheet
+      Caption = 'Nodes'
+      ClientHeight = 372
+      ClientWidth = 488
+      object GroupBox5: TGroupBox
+        Left = 8
+        Height = 320
+        Top = 8
+        Width = 473
+        Caption = 'Nodes'
+        ClientHeight = 300
+        ClientWidth = 469
+        TabOrder = 0
+        object StringGrid1: TStringGrid
+          Left = 8
+          Height = 288
+          Top = 0
+          Width = 456
+          AutoEdit = False
+          ColCount = 3
+          Columns = <          
+            item
+              Title.Caption = 'IP'
+            end          
+            item
+              Title.Caption = 'Port'
+            end          
+            item
+              Title.Caption = 'Status'
+            end>
+          ExtendedSelect = False
+          FixedCols = 0
+          TabOrder = 0
         end
       end
     end

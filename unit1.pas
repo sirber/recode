@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, IBConnection, FileUtil, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ComCtrls, AsyncProcess, Menus, LCLIntf, LazFileUtils;
+  StdCtrls, ComCtrls, AsyncProcess, Menus, LCLIntf, Grids, LazFileUtils;
 
 type
 
@@ -24,9 +24,12 @@ type
     chkFDenoise: TCheckBox;
     chkSBurn: TCheckBox;
     GroupBox4: TGroupBox;
+    GroupBox5: TGroupBox;
     Label12: TLabel;
     Label13: TLabel;
     Label14: TLabel;
+    Nodes: TTabSheet;
+    StringGrid1: TStringGrid;
     txtFHResize: TEdit;
     txtFWResize: TEdit;
     GroupBox3: TGroupBox;
@@ -65,7 +68,7 @@ type
     lstLogs: TListBox;
     lstFiles: TListBox;
     memoAbout: TMemo;
-    PageControl1: TPageControl;
+    pages: TPageControl;
     StatusBar1: TStatusBar;
     Status: TTabSheet;
     Files: TTabSheet;
@@ -134,7 +137,7 @@ begin
     AddLog('- Handbreak CLI not found. Please install Handbrerak.');
   end;
 
-  PageControl1.TabIndex:=0;
+  pages.TabIndex:=0;
 end;
 
 { Status }
@@ -319,7 +322,7 @@ begin
     if (FileExistsUTF8(FileNames[iCpt])) then
         lstFiles.Items.Add(FileNames[iCpt]);
   end;
-  PageControl1.TabIndex:=1;
+  pages.TabIndex:=1;
 end;
 
 procedure TForm1.Label13Click(Sender: TObject);
