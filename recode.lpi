@@ -42,7 +42,6 @@
       <Unit0>
         <Filename Value="recode.lpr"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <CursorPos X="49" Y="14"/>
         <UsageCount Value="53"/>
         <Loaded Value="True"/>
@@ -54,10 +53,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit1"/>
-        <EditorIndex Value="-1"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
         <TopLine Value="150"/>
         <CursorPos X="28" Y="161"/>
         <UsageCount Value="53"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="C:\lazarus\lcl\masks.pas"/>

@@ -3130,7 +3130,7 @@ object Form1: TForm1
   OnCreate = FormCreate
   OnDropFiles = FormDropFiles
   Position = poScreenCenter
-  LCLVersion = '1.6.0.2'
+  LCLVersion = '1.6.0.4'
   object StatusBar1: TStatusBar
     Left = 0
     Height = 23
@@ -3152,8 +3152,8 @@ object Form1: TForm1
     Height = 400
     Top = 8
     Width = 496
-    ActivePage = Nodes
-    TabIndex = 3
+    ActivePage = Status
+    TabIndex = 0
     TabOrder = 1
     object Status: TTabSheet
       Caption = 'Status'
