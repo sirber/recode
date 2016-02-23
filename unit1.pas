@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, IBConnection, FileUtil, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ComCtrls, AsyncProcess, Menus, LCLIntf, Grids, LazFileUtils;
+  StdCtrls, ComCtrls, AsyncProcess, Menus, LCLIntf, Grids, LazFileUtils,
+  laz_synapse;
 
 type
 
