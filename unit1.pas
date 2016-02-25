@@ -24,6 +24,7 @@ type
     chkFDeblock: TCheckBox;
     chkFDenoise: TCheckBox;
     chkSBurn: TCheckBox;
+    cboVMode: TComboBox;
     GroupBox4: TGroupBox;
     GroupBox5: TGroupBox;
     Label12: TLabel;
@@ -38,7 +39,6 @@ type
     Label11: TLabel;
     mmoHelp: TMemo;
     Subtitle: TGroupBox;
-    Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
     Label7: TLabel;
@@ -77,6 +77,7 @@ type
     About: TTabSheet;
     procedure cboACodecChange(Sender: TObject);
     procedure cboVCodecChange(Sender: TObject);
+    procedure cboVModeChange(Sender: TObject);
     procedure chkFResizeChange(Sender: TObject);
     procedure chkFDenoiseChange(Sender: TObject);
     procedure cmdStartClick(Sender: TObject);
@@ -203,7 +204,10 @@ begin
   end;
 
   { settings / codec / common}
-  sParameters.Add('-b');
+  case cboVMode.ItemIndex of
+    0: sParameters.Add('-b');  // bitrate
+    1: sParameters.Add('-q');  // quality
+  end;
   sParameters.Add(txtVBitrate.Text);
 
   { advanced }
@@ -378,6 +382,22 @@ begin
       cboVTune.Enabled := false;
       cboVProfile.Enabled := false;
     end;
+  end;
+end;
+
+procedure TForm1.cboVModeChange(Sender: TObject);
+begin
+  case cboVMode.ItemIndex of
+       0: // Bitrate
+       begin
+            txtVBitrate.Text := '352';
+            Label3.Caption := 'kbps';
+       end;
+       1: // Quality
+       begin
+            txtVBitrate.Text := '20';
+            Label3.Caption := 'Q';
+       end;
   end;
 end;
 

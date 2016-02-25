@@ -3152,8 +3152,8 @@ object Form1: TForm1
     Height = 400
     Top = 8
     Width = 496
-    ActivePage = Status
-    TabIndex = 0
+    ActivePage = Settings
+    TabIndex = 2
     TabOrder = 1
     object Status: TTabSheet
       Caption = 'Status'
@@ -3279,8 +3279,11 @@ object Form1: TForm1
         object txtVBitrate: TEdit
           Left = 86
           Height = 23
+          Hint = 'for x264, depend on source complexity: '#13#10#13#10'Bitrate:'#13#10'- 352 kbps for low bitrate anime'#13#10'- 768 kbps for SD'#13#10'- 1024 kbps for HD'#13#10#13#10'Quality:'#13#10'- 18-20 for SD'#13#10'- 20-23 for HD'
           Top = 32
           Width = 104
+          ParentShowHint = False
+          ShowHint = True
           TabOrder = 1
           Text = '352'
         end
@@ -3290,14 +3293,6 @@ object Form1: TForm1
           Top = 39
           Width = 25
           Caption = 'kbps'
-          ParentColor = False
-        end
-        object Label4: TLabel
-          Left = 6
-          Height = 15
-          Top = 39
-          Width = 37
-          Caption = 'Bitrate:'
           ParentColor = False
         end
         object cboVPreset: TComboBox
@@ -3383,6 +3378,22 @@ object Form1: TForm1
           Width = 37
           Caption = 'Profile:'
           ParentColor = False
+        end
+        object cboVMode: TComboBox
+          Left = 6
+          Height = 23
+          Top = 32
+          Width = 76
+          ItemHeight = 15
+          ItemIndex = 0
+          Items.Strings = (
+            'Bitrate'
+            'Quality'
+          )
+          OnChange = cboVModeChange
+          Style = csDropDownList
+          TabOrder = 5
+          Text = 'Bitrate'
         end
       end
       object Audio: TGroupBox
