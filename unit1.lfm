@@ -3152,8 +3152,8 @@ object Form1: TForm1
     Height = 400
     Top = 8
     Width = 496
-    ActivePage = Settings
-    TabIndex = 2
+    ActivePage = Status
+    TabIndex = 0
     TabOrder = 1
     object Status: TTabSheet
       Caption = 'Status'

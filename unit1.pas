@@ -105,7 +105,7 @@ var
   Form1: TForm1;
 
 const
-  sVersion: string = '2016-01-26 x64 dev';
+  sVersion: string = '2016-02-26 x64 dev';
 
 implementation
 
@@ -180,8 +180,6 @@ begin
       sParameters.Add(cboVTune.Items.Strings[cboVTune.ItemIndex]);
       sParameters.Add('--encoder-profile');
       sParameters.Add(cboVProfile.Items.Strings[cboVProfile.ItemIndex]);
-      sParameters.Add('-2'); // 2-pass
-      sParameters.Add('-T'); // turbo first pass
     end;
     1: // x265
     begin
@@ -205,7 +203,12 @@ begin
 
   { settings / codec / common}
   case cboVMode.ItemIndex of
-    0: sParameters.Add('-b');  // bitrate
+    0: // bitrate
+    begin
+      sParameters.Add('-2'); // 2-pass
+      sParameters.Add('-T'); // turbo first pass
+      sParameters.Add('-b');
+    end;
     1: sParameters.Add('-q');  // quality
   end;
   sParameters.Add(txtVBitrate.Text);
