@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 1033
+  Left = 1057
   Height = 436
-  Top = 125
+  Top = 160
   Width = 508
   AllowDropFiles = True
   BorderIcons = [biSystemMenu, biMinimize]
@@ -3130,7 +3130,7 @@ object Form1: TForm1
   OnCreate = FormCreate
   OnDropFiles = FormDropFiles
   Position = poScreenCenter
-  LCLVersion = '1.6.0.4'
+  LCLVersion = '1.8.0.5'
   object StatusBar1: TStatusBar
     Left = 0
     Height = 23
@@ -3645,42 +3645,6 @@ object Form1: TForm1
           Width = 177
           Caption = 'Use Intel QuickSync decoding'
           TabOrder = 2
-        end
-      end
-    end
-    object Nodes: TTabSheet
-      Caption = 'Nodes'
-      ClientHeight = 372
-      ClientWidth = 488
-      object GroupBox5: TGroupBox
-        Left = 8
-        Height = 320
-        Top = 8
-        Width = 473
-        Caption = 'Nodes'
-        ClientHeight = 300
-        ClientWidth = 469
-        TabOrder = 0
-        object StringGrid1: TStringGrid
-          Left = 8
-          Height = 288
-          Top = 0
-          Width = 456
-          AutoEdit = False
-          ColCount = 3
-          Columns = <          
-            item
-              Title.Caption = 'IP'
-            end          
-            item
-              Title.Caption = 'Port'
-            end          
-            item
-              Title.Caption = 'Status'
-            end>
-          ExtendedSelect = False
-          FixedCols = 0
-          TabOrder = 0
         end
       end
     end

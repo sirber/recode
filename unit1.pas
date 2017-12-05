@@ -6,8 +6,7 @@ interface
 
 uses
   Classes, SysUtils, IBConnection, FileUtil, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ComCtrls, AsyncProcess, Menus, LCLIntf, Grids, LazFileUtils,
-  laz_synapse;
+  StdCtrls, ComCtrls, AsyncProcess, Menus, LCLIntf, Grids, LazFileUtils;
 
 type
 
@@ -26,12 +25,9 @@ type
     chkSBurn: TCheckBox;
     cboVMode: TComboBox;
     GroupBox4: TGroupBox;
-    GroupBox5: TGroupBox;
     Label12: TLabel;
     Label13: TLabel;
     Label14: TLabel;
-    Nodes: TTabSheet;
-    StringGrid1: TStringGrid;
     txtFHResize: TEdit;
     txtFWResize: TEdit;
     GroupBox3: TGroupBox;
