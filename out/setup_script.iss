@@ -4,7 +4,7 @@
 #define MyAppName "Recode"
 #define MyAppVersion "20130619"
 #define MyAppPublisher "Detritus Software"
-#define MyAppURL "http://www.detritus.qc.ca"
+#define MyAppURL "https://github.com/sirber/recode"
 #define MyAppExeName "recode.exe"
 
 [Setup]
@@ -36,8 +36,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "recode.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "sqlite3.dll"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "bin\HandBrakeCLI.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "HandBrakeCLI.exe"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

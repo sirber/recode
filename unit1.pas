@@ -124,17 +124,6 @@ begin
   addLog(Form1.Text);
   memoAbout.Lines.Text := StringReplace(memoAbout.Lines.Text, '{version}', sVersion, [rfIgnoreCase]);   ;
 
-  { Find Handbreak CLI}
-  encoder := 'C:\Program Files\Handbrake\HandBrakeCLI.exe';
-  if (FileExists(encoder)) then
-  begin
-    AddLog('- Handbreak CLI detected.');
-  end
-  else
-  begin
-    AddLog('- Handbreak CLI not found. Please install Handbrerak.');
-  end;
-
   pages.TabIndex:=0;
 end;
 
@@ -438,8 +427,8 @@ end;
 procedure TForm1.encode_start(sFile: string; sParameters: TStrings);
 begin
   addLog('Encoding: ' + ExtractFileNameOnly(sFile));
-  oProcess.Executable:=encoder;  // global
-  oProcess.Parameters:=sParameters;
+  oProcess.Executable := 'bin/HandBrakeCLI.exe';
+  oProcess.Parameters := sParameters;
 
   oProcess.Execute;
 end;
