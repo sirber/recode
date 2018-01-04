@@ -6,19 +6,16 @@ interface
 
 uses
   Classes, SysUtils, IBConnection, FileUtil, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ComCtrls, AsyncProcess, Menus, LCLIntf, Grids, LazFileUtils;
+  StdCtrls, ComCtrls, AsyncProcess, Menus, LCLIntf, LazFileUtils,
+  Clipbrd;
 
 type
 
   { TForm1 }
   TForm1 = class(TForm)
     cboVPreset: TComboBox;
-    cboVProfile: TComboBox;
     cboVTune: TComboBox;
-    cboVDenoise: TComboBox;
     chkFResize: TCheckBox;
-    chkFDeblock: TCheckBox;
-    chkFDenoise: TCheckBox;
     cboVMode: TComboBox;
     Label12: TLabel;
     Label13: TLabel;
@@ -26,18 +23,12 @@ type
     txtFHResize: TEdit;
     txtFWResize: TEdit;
     GroupBox3: TGroupBox;
-    Label10: TLabel;
-    Label11: TLabel;
     mmoHelp: TMemo;
-    Subtitle: TGroupBox;
     Label5: TLabel;
     Label6: TLabel;
-    Label7: TLabel;
     Label8: TLabel;
     Label9: TLabel;
     Help: TTabSheet;
-    txtATrack: TEdit;
-    txtSTrack: TEdit;
     txtVBitrate: TEdit;
     Label3: TLabel;
     oProcess: TAsyncProcess;
@@ -46,9 +37,7 @@ type
     Button3: TButton;
     Audio: TGroupBox;
     cboVCodec: TComboBox;
-    cboACodec: TComboBox;
     Label1: TLabel;
-    Label2: TLabel;
     txtABitrate: TEdit;
     Video: TGroupBox;
     MenuItem1: TMenuItem;
@@ -66,11 +55,9 @@ type
     Files: TTabSheet;
     Settings: TTabSheet;
     About: TTabSheet;
-    procedure cboACodecChange(Sender: TObject);
     procedure cboVCodecChange(Sender: TObject);
     procedure cboVModeChange(Sender: TObject);
     procedure chkFResizeChange(Sender: TObject);
-    procedure chkFDenoiseChange(Sender: TObject);
     procedure cmdStartClick(Sender: TObject);
     procedure cmdStopClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -79,11 +66,9 @@ type
     procedure Label14Click(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
-    procedure oProcessReadData(Sender: TObject);
     procedure oProcessTerminate(Sender: TObject);
   private
     { private declarations }
-    encoder: string;
     procedure encode_start(sFile: string; sParameters: TStrings);
     procedure addLog(sMessage: string);
     procedure updateStatus(sStatus: string);
@@ -96,7 +81,7 @@ var
   Form1: TForm1;
 
 const
-  sVersion: string = '2017-12-04 x64 dev';
+  sVersion: string = '2018-01-04 x64 dev';
 
 implementation
 
@@ -126,7 +111,6 @@ end;
 procedure TForm1.cmdStartClick(Sender: TObject);
 var
   sFile: string;
-  sCmdLine: string;
   sParameters: TStrings;
 begin
   if (lstFiles.Items.Count = 0) then
@@ -149,35 +133,52 @@ begin
   sParameters.Add('"' + sFile + '"');
 
   {video}
+  sParameters.Add('-c:v');
   case cboVCodec.ItemIndex of
     0: // x264
     begin
-      sParameters.Add('-e');
-      sParameters.Add('x264');
+      sParameters.Add('libx264');
+      sParameters.Add('-preset');
+      sParameters.Add(cboVPreset.Items.Strings[cboVPreset.ItemIndex]);
+      if ( cboVTune.ItemIndex > 0 ) then
+      begin
+           sParameters.Add('-tune');
+           sParameters.Add(cboVTune.Items.Strings[cboVTune.ItemIndex]);
+      end;
+    end;
+    1: // H264 (NVENC)
+    begin
+      sParameters.Add('h264_nvenc');
+    end;
+    2: // H264 (qsv)
+    begin
+      sParameters.Add('h264_qsv');
+      sParameters.Add('-preset');
+      sParameters.Add(cboVPreset.Items.Strings[cboVPreset.ItemIndex]);
+      sParameters.Add('-look_ahead');
+      sParameters.Add('0');
+    end;
+    3: // x265
+    begin
+      sParameters.Add('libx265');
       sParameters.Add('--encoder-preset');
       sParameters.Add(cboVPreset.Items.Strings[cboVPreset.ItemIndex]);
-      sParameters.Add('--encoder-tune');
-      sParameters.Add(cboVTune.Items.Strings[cboVTune.ItemIndex]);
-      sParameters.Add('--encoder-profile');
-      sParameters.Add(cboVProfile.Items.Strings[cboVProfile.ItemIndex]);
     end;
-    1: // x265
+    4: // H265 (NVENC)
     begin
-      sParameters.Add('-e');
-      sParameters.Add('x265');
-      sParameters.Add('--encoder-preset');
-      sParameters.Add(cboVPreset.Items.Strings[cboVPreset.ItemIndex]);
-      sParameters.Add('-2'); // 2-pass
+      sParameters.Add('hevc_nvenc');
     end;
-    2: // vp8
+    5: // H265 (qsv)
     begin
-      sParameters.Add('-e');
-      sParameters.Add('vp8');
+      sParameters.Add('hevc_qsv');
     end;
-    3: // mpeg4
+    6: // vp8
     begin
-      sParameters.Add('-e');
-      sParameters.Add('mpeg4');
+      sParameters.Add('libvpx');
+    end;
+    7: // vp9
+    begin
+      sParameters.Add('libvpx-vp9');
     end;
   end;
 
@@ -185,42 +186,30 @@ begin
   case cboVMode.ItemIndex of
     0: // bitrate
     begin
-      sParameters.Add('-2'); // 2-pass
-      sParameters.Add('-T'); // turbo first pass
-      sParameters.Add('-b');
+      sParameters.Add('-b:v');
+      sParameters.Add( Concat(txtVBitrate.Text, 'K') );
     end;
-    1: sParameters.Add('-q');  // quality
-  end;
-  sParameters.Add(txtVBitrate.Text);
-
-  {output}
-  sParameters.Add('-o');
-  sParameters.Add('"' + makeOutput(sFile) + '"');
-
-  { audio }
-  sParameters.Add('-E');
-  sParameters.Add(cboACodec.Text);
-  sParameters.Add('-a');
-  sParameters.Add(txtATrack.Text);
-  sParameters.Add('-B');
-  sParameters.Add(txtABitrate.Text);
-
-  { subtitle }
-  if (strlen(pchar(txtSTrack.Text)) > 0) then
-  begin
-    sParameters.Add('-s');
-    sParameters.Add(txtSTrack.Text);
-    sCmdLine := sCmdLine + '-s ' + txtSTrack.Text + ' ';
+    1: // quality
+    begin
+      sParameters.Add('-crf');
+      sParameters.Add(txtVBitrate.Text);
+    end;
   end;
 
-  { filtering }
-  if (chkFDenoise.Checked) then
-  begin
-    sParameters.Add('--denoise');
-    sParameters.Add(cboVDenoise.Items.Strings[cboVDenoise.ItemIndex]);
-  end;
-  if (chkFDeblock.Checked) then
-    sParameters.Add('--deblock');
+  { audio } { forced he-aac v2 }
+  sParameters.Add('-b:a');
+  sParameters.Add( Concat(txtABitrate.Text, 'K') );
+  sParameters.Add('-c:a');
+  sParameters.Add('libfdk_aac');
+  sParameters.Add('-profile:a');
+  sParameters.Add('aac_he_v2');
+  sParameters.Add('-ac');
+  sParameters.Add('2');
+
+  { subtitle } {copy}
+  sParameters.Add('-c:s copy');
+
+  { filtering } {todo}
   if (chkFResize.Checked) then
   begin
     if (Length(txtFWResize.Text) > 0) then
@@ -234,6 +223,12 @@ begin
       sParameters.Add(txtFHResize.Text);
     end;
   end;
+
+  {output}
+  sParameters.Add('-y');
+  sParameters.Add('"' + makeOutput(sFile) + '"');
+
+  Clipboard.AsText := sParameters.Text;
 
   { start }
   encode_start(sFile, sParameters);
@@ -252,11 +247,6 @@ begin
     bFound := false;
     sOutput := txtDestination.Text + ExtractFileNameOnly(sFile) + sSuffix;
     sOutput := sOutput + '.mkv';
-    {case cboPreset.ItemIndex of
-      0: sOutput := sOutput + '.mkv';
-      1: sOutput := sOutput + '.mp4';
-      2: sOutput := sOutput + '.mp4';
-    end;}
     sOutput := StringReplace(sOutput, '{source}', ExtractFilePath(sFile), [rfIgnoreCase]);
 
     if (FileExists(sOutput)) then
@@ -338,25 +328,36 @@ end;
 { Settings }
 procedure TForm1.cboVCodecChange(Sender: TObject);
 begin
-  // x264 specific
   case cboVCodec.ItemIndex of
     0: // x264
     begin
       cboVPreset.Enabled := true;
       cboVTune.Enabled := true;
-      cboVProfile.Enabled := true;
     end;
-    1: // x265
-    begin
-      cboVPreset.Enabled := true;
-      cboVTune.Enabled := false;
-      cboVProfile.Enabled := false;
-    end;
-    2,3: // vp8, mpeg4
+    1: // h264 nvenc
     begin
       cboVPreset.Enabled := false;
       cboVTune.Enabled := false;
-      cboVProfile.Enabled := false;
+    end;
+    2: // h264_qsv
+    begin
+      cboVPreset.Enabled := true;
+      cboVTune.Enabled := false;
+    end;
+    3: // x265
+    begin
+      cboVPreset.Enabled := true;
+      cboVTune.Enabled := false;
+    end;
+    4,5: // h265 hw
+    begin
+      cboVPreset.Enabled := false;
+      cboVTune.Enabled := false;
+    end;
+    6,7: // vp8, vp9
+    begin
+      cboVPreset.Enabled := false;
+      cboVTune.Enabled := false;
     end;
   end;
 end;
@@ -366,12 +367,12 @@ begin
   case cboVMode.ItemIndex of
        0: // Bitrate
        begin
-            txtVBitrate.Text := '352';
+            txtVBitrate.Text := '512';
             Label3.Caption := 'kbps';
        end;
        1: // Quality
        begin
-            txtVBitrate.Text := '20';
+            txtVBitrate.Text := '24';
             Label3.Caption := 'Q';
        end;
   end;
@@ -390,34 +391,16 @@ begin
   end;
 end;
 
-procedure TForm1.chkFDenoiseChange(Sender: TObject);
-begin
-  if ((chkFDenoise.Checked) and (cboVCodec.ItemIndex = 0)) then
-    cboVDenoise.Enabled:=true
-  else
-    cboVDenoise.Enabled:=false;
-end;
-
-procedure TForm1.cboACodecChange(Sender: TObject);
-begin
-  case cboACodec.ItemIndex of
-    0: txtABitrate.Text:='64';
-    1: txtABitrate.Text:='96';
-    2: txtABitrate.Text:='64';
-    3: txtABitrate.Text:='128';
-  end;
-  txtATrack.Text := '1';
-end;
-
 { About }
 
 {*** ENCODING ***}
 procedure TForm1.encode_start(sFile: string; sParameters: TStrings);
 begin
   addLog('Encoding: ' + ExtractFileNameOnly(sFile));
-  oProcess.Executable := 'HandBrakeCLI.exe';
+  oProcess.Executable := 'bin/ffmpeg.exe';
   oProcess.Parameters := sParameters;
 
+  updateStatus('encoding...');
   oProcess.Execute;
 end;
 
@@ -438,19 +421,6 @@ begin
   // Start again
   cmdStartClick(Sender);
 end;
-
-procedure TForm1.oProcessReadData(Sender: TObject);
-var
-  aOutput: TStringList;
-begin
-  aOutput := TStringList.Create();
-  aOutput.LoadFromStream(oProcess.Output);
-  if (aOutput.Count > 0) then
-  begin
-    updateStatus(aOutput.Strings[aOutput.Count - 1]);
-  end;
-end;
-
 
 
 end.

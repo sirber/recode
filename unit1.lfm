@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 1045
+  Left = 1008
   Height = 436
-  Top = 119
+  Top = 163
   Width = 508
   AllowDropFiles = True
   BorderIcons = [biSystemMenu, biMinimize]
@@ -3243,11 +3243,11 @@ object Form1: TForm1
       ClientWidth = 488
       object Video: TGroupBox
         Left = 5
-        Height = 176
+        Height = 152
         Top = 8
         Width = 232
         Caption = 'Video'
-        ClientHeight = 156
+        ClientHeight = 132
         ClientWidth = 228
         TabOrder = 0
         object cboVCodec: TComboBox
@@ -3260,10 +3260,10 @@ object Form1: TForm1
           Items.Strings = (
             'H264'
             'H264 (NVENC)'
-            'H264 (QVS)'
+            'H264 (QSV)'
             'H265'
             'H265 (NVENC)'
-            'H265 (QVS)'
+            'H265 (QSV)'
             'VP8'
             'VP9'
           )
@@ -3305,10 +3305,8 @@ object Form1: TForm1
           Top = 64
           Width = 140
           ItemHeight = 15
-          ItemIndex = 6
+          ItemIndex = 4
           Items.Strings = (
-            'ultrafast'
-            'superfast'
             'veryfast'
             'faster'
             'fast'
@@ -3359,31 +3357,6 @@ object Form1: TForm1
           Caption = 'Tune:'
           ParentColor = False
         end
-        object cboVProfile: TComboBox
-          Left = 86
-          Height = 23
-          Top = 128
-          Width = 140
-          ItemHeight = 15
-          ItemIndex = 0
-          Items.Strings = (
-            'auto'
-            'baseline'
-            'main'
-            'high'
-          )
-          Style = csDropDownList
-          TabOrder = 4
-          Text = 'auto'
-        end
-        object Label11: TLabel
-          Left = 6
-          Height = 15
-          Top = 135
-          Width = 37
-          Caption = 'Profile:'
-          ParentColor = False
-        end
         object cboVMode: TComboBox
           Left = 6
           Height = 23
@@ -3397,210 +3370,92 @@ object Form1: TForm1
           )
           OnChange = cboVModeChange
           Style = csDropDownList
-          TabOrder = 5
+          TabOrder = 4
           Text = 'Bitrate'
         end
       end
       object Audio: TGroupBox
         Left = 5
-        Height = 112
-        Top = 184
+        Height = 48
+        Top = 168
         Width = 233
         Caption = 'Audio'
-        ClientHeight = 92
+        ClientHeight = 28
         ClientWidth = 229
         TabOrder = 1
-        object cboACodec: TComboBox
-          Left = 86
-          Height = 23
-          Hint = 'MKV: vorbis, aac, mp3'#13#10'MP4: aac'#13#10#13#10'For multi track, use a comma (",") between the codecs.'#13#10'ex: vorbis,vorbis'
-          Top = 0
-          Width = 140
-          ItemHeight = 15
-          ItemIndex = 2
-          Items.Strings = (
-            'fdk_haac'
-            'fdk_aac'
-            'vorbis'
-            'mp3'
-            'copy'
-          )
-          OnChange = cboACodecChange
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 0
-          Text = 'vorbis'
-        end
-        object Label2: TLabel
-          Left = 6
+        object Label5: TLabel
+          Left = 197
           Height = 15
           Top = 7
-          Width = 37
-          Caption = 'Codec:'
-          ParentColor = False
-        end
-        object Label5: TLabel
-          Left = 198
-          Height = 15
-          Top = 39
           Width = 25
           Caption = 'kbps'
           ParentColor = False
         end
         object txtABitrate: TEdit
-          Left = 86
+          Left = 85
           Height = 23
           Hint = 'Vorbis: 32 - 256 kbps'#13#10'AAC: 64 - 256 kbps'#13#10'MP3: 96 - 256 kbps'
-          Top = 32
+          Top = 0
           Width = 104
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 1
+          TabOrder = 0
           Text = '64'
         end
         object Label6: TLabel
-          Left = 6
+          Left = 5
           Height = 15
-          Top = 39
+          Top = 7
           Width = 37
           Caption = 'Bitrate:'
           ParentColor = False
         end
-        object txtATrack: TEdit
-          Left = 87
-          Height = 23
-          Hint = '"none" for no audio, '#13#10'"1,2,3" for multiple  tracks, '#13#10'default: "1"'
-          Top = 64
-          Width = 137
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 2
-          Text = '1'
-        end
-        object Label7: TLabel
-          Left = 7
-          Height = 15
-          Top = 71
-          Width = 36
-          Caption = 'Tracks:'
-          ParentColor = False
-        end
-      end
-      object Subtitle: TGroupBox
-        Left = 244
-        Height = 56
-        Top = 8
-        Width = 233
-        Caption = 'Subtitle'
-        ClientHeight = 36
-        ClientWidth = 229
-        TabOrder = 2
-        object Label10: TLabel
-          Left = 7
-          Height = 15
-          Top = 7
-          Width = 36
-          Caption = 'Tracks:'
-          ParentColor = False
-        end
-        object txtSTrack: TEdit
-          Left = 87
-          Height = 23
-          Hint = '"none" for no audio, '#13#10'"1,2,3" for multiple  tracks, '#13#10'default: "1"'
-          Top = 0
-          Width = 137
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 0
-          Text = '1'
-        end
       end
       object GroupBox3: TGroupBox
-        Left = 244
-        Height = 112
-        Top = 72
+        Left = 5
+        Height = 64
+        Top = 224
         Width = 233
         Caption = 'Filtering'
-        ClientHeight = 92
+        ClientHeight = 44
         ClientWidth = 229
-        TabOrder = 3
-        object chkFDenoise: TCheckBox
-          Left = 7
-          Height = 23
-          Hint = 'Denoise video with hqdn3d filter'
-          Top = 8
-          Width = 62
-          AutoSize = False
-          Caption = 'Denoise'
-          OnChange = chkFDenoiseChange
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 0
-        end
-        object chkFDeblock: TCheckBox
-          Left = 7
-          Height = 23
-          Hint = 'Deblock video with pp7 filter'
-          Top = 39
-          Width = 63
-          AutoSize = False
-          Caption = 'Deblock'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 1
-        end
-        object cboVDenoise: TComboBox
-          Left = 86
-          Height = 23
-          Top = 8
-          Width = 140
-          Enabled = False
-          ItemHeight = 15
-          ItemIndex = 0
-          Items.Strings = (
-            'weak'
-            'medium'
-            'strong'
-          )
-          Style = csDropDownList
-          TabOrder = 2
-          Text = 'weak'
-        end
+        TabOrder = 2
         object chkFResize: TCheckBox
           Left = 7
           Height = 19
-          Top = 71
+          Top = 11
           Width = 52
           Caption = 'Resize'
+          Enabled = False
           OnChange = chkFResizeChange
-          TabOrder = 3
+          TabOrder = 0
         end
         object txtFWResize: TEdit
           Left = 86
           Height = 23
           Hint = 'Width.'#13#10'Heigth is optional.'
-          Top = 64
+          Top = 7
           Width = 63
           Enabled = False
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 4
+          TabOrder = 1
         end
         object txtFHResize: TEdit
           Left = 158
           Height = 23
           Hint = 'Height.'#13#10'Width is optional.'
-          Top = 64
+          Top = 7
           Width = 64
           Enabled = False
           ParentShowHint = False
           ShowHint = True
-          TabOrder = 5
+          TabOrder = 2
         end
         object Label12: TLabel
           Left = 150
           Height = 15
-          Top = 72
+          Top = 15
           Width = 5
           Caption = 'x'
           ParentColor = False
@@ -3706,7 +3561,7 @@ object Form1: TForm1
   end
   object oProcess: TAsyncProcess
     Active = False
-    Options = [poUsePipes, poStderrToOutPut]
+    Options = [poNoConsole]
     Priority = ppIdle
     StartupOptions = []
     ShowWindow = swoHIDE
@@ -3717,7 +3572,6 @@ object Form1: TForm1
     WindowTop = 0
     WindowWidth = 0
     FillAttribute = 0
-    OnReadData = oProcessReadData
     OnTerminate = oProcessTerminate
     left = 440
     top = 8
