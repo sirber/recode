@@ -3152,21 +3152,13 @@ object Form1: TForm1
     Height = 400
     Top = 8
     Width = 496
-    ActivePage = Settings
-    TabIndex = 2
+    ActivePage = Main
+    TabIndex = 0
     TabOrder = 1
-    object Status: TTabSheet
-      Caption = 'Status'
+    object Main: TTabSheet
+      Caption = 'Main'
       ClientHeight = 372
       ClientWidth = 488
-      object lstLogs: TListBox
-        Left = 4
-        Height = 328
-        Top = 8
-        Width = 479
-        ItemHeight = 0
-        TabOrder = 0
-      end
       object cmdStart: TButton
         Left = 4
         Height = 25
@@ -3174,7 +3166,7 @@ object Form1: TForm1
         Width = 144
         Caption = 'Start encoding process'
         OnClick = cmdStartClick
-        TabOrder = 1
+        TabOrder = 0
       end
       object cmdStop: TButton
         Left = 156
@@ -3184,281 +3176,252 @@ object Form1: TForm1
         Caption = 'Stop'
         Enabled = False
         OnClick = cmdStopClick
-        TabOrder = 2
+        TabOrder = 1
       end
-    end
-    object Files: TTabSheet
-      Caption = 'Files'
-      ClientHeight = 372
-      ClientWidth = 488
+      object GroupBox4: TGroupBox
+        Left = 0
+        Height = 105
+        Top = 232
+        Width = 296
+        Caption = 'Logs'
+        ClientHeight = 85
+        ClientWidth = 292
+        TabOrder = 2
+        object lstLogs: TListBox
+          Left = 8
+          Height = 80
+          Top = 0
+          Width = 276
+          ItemHeight = 0
+          TabOrder = 0
+        end
+      end
       object GroupBox1: TGroupBox
         Left = 4
-        Height = 296
+        Height = 224
         Top = 8
-        Width = 480
+        Width = 292
         Caption = 'Files to encode'
-        ClientHeight = 276
-        ClientWidth = 476
-        TabOrder = 0
+        ClientHeight = 204
+        ClientWidth = 288
+        TabOrder = 3
         object lstFiles: TListBox
           Left = 6
-          Height = 264
+          Height = 120
           Top = 8
-          Width = 464
+          Width = 274
           ItemHeight = 0
           PopupMenu = pmFiles
           TabOrder = 0
         end
-      end
-      object GroupBox2: TGroupBox
-        Left = 4
-        Height = 57
-        Top = 312
-        Width = 481
-        Caption = 'Destination folder'
-        ClientHeight = 37
-        ClientWidth = 477
-        TabOrder = 1
-        object txtDestination: TEdit
-          Left = 7
-          Height = 23
-          Top = 8
-          Width = 368
-          TabOrder = 0
-          Text = '{source}\'
-        end
-        object Button3: TButton
-          Left = 383
-          Height = 23
-          Top = 8
-          Width = 75
-          Caption = 'Browse'
+        object GroupBox2: TGroupBox
+          Left = 6
+          Height = 57
+          Top = 136
+          Width = 274
+          Caption = 'Destination folder'
+          ClientHeight = 37
+          ClientWidth = 270
           TabOrder = 1
+          object txtDestination: TEdit
+            Left = 7
+            Height = 23
+            Top = 8
+            Width = 225
+            TabOrder = 0
+            Text = '{source}\'
+          end
+          object Button3: TButton
+            Left = 240
+            Height = 23
+            Top = 8
+            Width = 24
+            Caption = '...'
+            TabOrder = 1
+          end
         end
       end
-    end
-    object Settings: TTabSheet
-      Caption = 'Settings'
-      ClientHeight = 372
-      ClientWidth = 488
-      object Video: TGroupBox
-        Left = 5
-        Height = 152
+      object GroupBox5: TGroupBox
+        Left = 304
+        Height = 361
         Top = 8
-        Width = 232
-        Caption = 'Video'
-        ClientHeight = 132
-        ClientWidth = 228
-        TabOrder = 0
-        object cboVCodec: TComboBox
-          Left = 86
-          Height = 23
+        Width = 177
+        Caption = 'Settings'
+        ClientHeight = 341
+        ClientWidth = 173
+        TabOrder = 4
+        object Video: TGroupBox
+          Left = 2
+          Height = 152
           Top = 0
-          Width = 140
-          ItemHeight = 15
-          ItemIndex = 0
-          Items.Strings = (
-            'H264'
-            'H264 (NVENC)'
-            'H264 (QSV)'
-            'H265'
-            'H265 (NVENC)'
-            'H265 (QSV)'
-            'VP8'
-            'VP9'
-          )
-          OnChange = cboVCodecChange
-          Style = csDropDownList
+          Width = 166
+          Caption = 'Video'
+          ClientHeight = 132
+          ClientWidth = 162
           TabOrder = 0
-          Text = 'H264'
+          object cboVCodec: TComboBox
+            Left = 57
+            Height = 23
+            Top = 0
+            Width = 100
+            ItemHeight = 15
+            ItemIndex = 0
+            Items.Strings = (
+              'H264'
+              'H264 (NVENC)'
+              'H264 (QSV)'
+              'H265'
+              'H265 (NVENC)'
+              'H265 (QSV)'
+              'VP8'
+              'VP9'
+            )
+            OnChange = cboVCodecChange
+            Style = csDropDownList
+            TabOrder = 0
+            Text = 'H264'
+          end
+          object Label1: TLabel
+            Left = 6
+            Height = 15
+            Top = 7
+            Width = 37
+            Caption = 'Codec:'
+            ParentColor = False
+          end
+          object txtVBitrate: TEdit
+            Left = 86
+            Height = 23
+            Hint = 'for x264, depend on source complexity: '#13#10#13#10'Bitrate:'#13#10'- 352 kbps for low bitrate anime'#13#10'- 768 kbps for SD'#13#10'- 1024 kbps for HD'#13#10#13#10'Quality:'#13#10'- 18-20 for SD'#13#10'- 20-23 for HD'
+            Top = 32
+            Width = 71
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 1
+            Text = '512'
+          end
+          object cboVPreset: TComboBox
+            Left = 57
+            Height = 23
+            Top = 64
+            Width = 99
+            ItemHeight = 15
+            ItemIndex = 4
+            Items.Strings = (
+              'veryfast'
+              'faster'
+              'fast'
+              'medium'
+              'slow'
+              'slower'
+              'veryslow'
+            )
+            Style = csDropDownList
+            TabOrder = 2
+            Text = 'slow'
+          end
+          object Label8: TLabel
+            Left = 6
+            Height = 15
+            Top = 71
+            Width = 38
+            Caption = 'Preset: '
+            ParentColor = False
+          end
+          object cboVTune: TComboBox
+            Left = 56
+            Height = 23
+            Top = 95
+            Width = 102
+            ItemHeight = 15
+            ItemIndex = 0
+            Items.Strings = (
+              'none'
+              'film'
+              'animation'
+              'grain'
+              'stillimage'
+              'psnr'
+              'ssim'
+              'fastdecode'
+              'zerolatency'
+            )
+            Style = csDropDownList
+            TabOrder = 3
+            Text = 'none'
+          end
+          object Label9: TLabel
+            Left = 6
+            Height = 15
+            Top = 103
+            Width = 30
+            Caption = 'Tune:'
+            ParentColor = False
+          end
+          object cboVMode: TComboBox
+            Left = 6
+            Height = 23
+            Top = 32
+            Width = 76
+            ItemHeight = 15
+            ItemIndex = 0
+            Items.Strings = (
+              'Bitrate'
+              'Quality'
+            )
+            OnChange = cboVModeChange
+            Style = csDropDownList
+            TabOrder = 4
+            Text = 'Bitrate'
+          end
         end
-        object Label1: TLabel
-          Left = 6
-          Height = 15
-          Top = 7
-          Width = 37
-          Caption = 'Codec:'
-          ParentColor = False
-        end
-        object txtVBitrate: TEdit
-          Left = 86
-          Height = 23
-          Hint = 'for x264, depend on source complexity: '#13#10#13#10'Bitrate:'#13#10'- 352 kbps for low bitrate anime'#13#10'- 768 kbps for SD'#13#10'- 1024 kbps for HD'#13#10#13#10'Quality:'#13#10'- 18-20 for SD'#13#10'- 20-23 for HD'
-          Top = 32
-          Width = 104
-          ParentShowHint = False
-          ShowHint = True
+        object Audio: TGroupBox
+          Left = 2
+          Height = 48
+          Top = 160
+          Width = 166
+          Caption = 'Audio'
+          ClientHeight = 28
+          ClientWidth = 162
           TabOrder = 1
-          Text = '512'
+          object txtABitrate: TEdit
+            Left = 85
+            Height = 23
+            Hint = 'Vorbis: 32 - 256 kbps'#13#10'AAC: 64 - 256 kbps'#13#10'MP3: 96 - 256 kbps'
+            Top = 0
+            Width = 72
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 0
+            Text = '64'
+          end
+          object Label6: TLabel
+            Left = 5
+            Height = 15
+            Top = 7
+            Width = 37
+            Caption = 'Bitrate:'
+            ParentColor = False
+          end
         end
-        object Label3: TLabel
-          Left = 198
-          Height = 15
-          Top = 39
-          Width = 25
-          Caption = 'kbps'
-          ParentColor = False
-        end
-        object cboVPreset: TComboBox
-          Left = 86
-          Height = 23
-          Top = 64
-          Width = 140
-          ItemHeight = 15
-          ItemIndex = 4
-          Items.Strings = (
-            'veryfast'
-            'faster'
-            'fast'
-            'medium'
-            'slow'
-            'slower'
-            'veryslow'
-          )
-          Style = csDropDownList
+        object GroupBox3: TGroupBox
+          Left = 2
+          Height = 64
+          Top = 208
+          Width = 166
+          Caption = 'Filtering'
+          ClientHeight = 44
+          ClientWidth = 162
           TabOrder = 2
-          Text = 'slow'
-        end
-        object Label8: TLabel
-          Left = 6
-          Height = 15
-          Top = 71
-          Width = 38
-          Caption = 'Preset: '
-          ParentColor = False
-        end
-        object cboVTune: TComboBox
-          Left = 86
-          Height = 23
-          Top = 96
-          Width = 140
-          ItemHeight = 15
-          ItemIndex = 0
-          Items.Strings = (
-            'none'
-            'film'
-            'animation'
-            'grain'
-            'stillimage'
-            'psnr'
-            'ssim'
-            'fastdecode'
-            'zerolatency'
-          )
-          Style = csDropDownList
-          TabOrder = 3
-          Text = 'none'
-        end
-        object Label9: TLabel
-          Left = 6
-          Height = 15
-          Top = 103
-          Width = 30
-          Caption = 'Tune:'
-          ParentColor = False
-        end
-        object cboVMode: TComboBox
-          Left = 6
-          Height = 23
-          Top = 32
-          Width = 76
-          ItemHeight = 15
-          ItemIndex = 0
-          Items.Strings = (
-            'Bitrate'
-            'Quality'
-          )
-          OnChange = cboVModeChange
-          Style = csDropDownList
-          TabOrder = 4
-          Text = 'Bitrate'
-        end
-      end
-      object Audio: TGroupBox
-        Left = 5
-        Height = 48
-        Top = 168
-        Width = 233
-        Caption = 'Audio'
-        ClientHeight = 28
-        ClientWidth = 229
-        TabOrder = 1
-        object Label5: TLabel
-          Left = 197
-          Height = 15
-          Top = 7
-          Width = 25
-          Caption = 'kbps'
-          ParentColor = False
-        end
-        object txtABitrate: TEdit
-          Left = 85
-          Height = 23
-          Hint = 'Vorbis: 32 - 256 kbps'#13#10'AAC: 64 - 256 kbps'#13#10'MP3: 96 - 256 kbps'
-          Top = 0
-          Width = 104
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 0
-          Text = '64'
-        end
-        object Label6: TLabel
-          Left = 5
-          Height = 15
-          Top = 7
-          Width = 37
-          Caption = 'Bitrate:'
-          ParentColor = False
-        end
-      end
-      object GroupBox3: TGroupBox
-        Left = 5
-        Height = 64
-        Top = 224
-        Width = 233
-        Caption = 'Filtering'
-        ClientHeight = 44
-        ClientWidth = 229
-        TabOrder = 2
-        object chkFResize: TCheckBox
-          Left = 7
-          Height = 19
-          Top = 11
-          Width = 52
-          Caption = 'Resize'
-          Enabled = False
-          OnChange = chkFResizeChange
-          TabOrder = 0
-        end
-        object txtFWResize: TEdit
-          Left = 86
-          Height = 23
-          Hint = 'Width.'#13#10'Heigth is optional.'
-          Top = 7
-          Width = 63
-          Enabled = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 1
-        end
-        object txtFHResize: TEdit
-          Left = 158
-          Height = 23
-          Hint = 'Height.'#13#10'Width is optional.'
-          Top = 7
-          Width = 64
-          Enabled = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 2
-        end
-        object Label12: TLabel
-          Left = 150
-          Height = 15
-          Top = 15
-          Width = 5
-          Caption = 'x'
-          ParentColor = False
+          object chkFResize: TCheckBox
+            Left = 7
+            Height = 19
+            Top = 11
+            Width = 52
+            Caption = 'Resize'
+            Enabled = False
+            TabOrder = 0
+          end
         end
       end
     end

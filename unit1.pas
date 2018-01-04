@@ -13,51 +13,45 @@ type
 
   { TForm1 }
   TForm1 = class(TForm)
+    Audio: TGroupBox;
+    Button3: TButton;
+    cboVCodec: TComboBox;
+    cboVMode: TComboBox;
     cboVPreset: TComboBox;
     cboVTune: TComboBox;
     chkFResize: TCheckBox;
-    cboVMode: TComboBox;
-    Label12: TLabel;
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
+    GroupBox4: TGroupBox;
+    GroupBox5: TGroupBox;
+    Label1: TLabel;
     Label13: TLabel;
     Label14: TLabel;
-    txtFHResize: TEdit;
-    txtFWResize: TEdit;
-    GroupBox3: TGroupBox;
-    mmoHelp: TMemo;
-    Label5: TLabel;
     Label6: TLabel;
     Label8: TLabel;
     Label9: TLabel;
+    lstFiles: TListBox;
+    lstLogs: TListBox;
+    txtABitrate: TEdit;
+    txtDestination: TEdit;
+    mmoHelp: TMemo;
     Help: TTabSheet;
-    txtVBitrate: TEdit;
-    Label3: TLabel;
     oProcess: TAsyncProcess;
     cmdStart: TButton;
     cmdStop: TButton;
-    Button3: TButton;
-    Audio: TGroupBox;
-    cboVCodec: TComboBox;
-    Label1: TLabel;
-    txtABitrate: TEdit;
-    Video: TGroupBox;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
     pmFiles: TPopupMenu;
-    txtDestination: TEdit;
-    GroupBox1: TGroupBox;
-    GroupBox2: TGroupBox;
-    lstLogs: TListBox;
-    lstFiles: TListBox;
     memoAbout: TMemo;
     pages: TPageControl;
     StatusBar1: TStatusBar;
-    Status: TTabSheet;
-    Files: TTabSheet;
-    Settings: TTabSheet;
+    Main: TTabSheet;
     About: TTabSheet;
+    txtVBitrate: TEdit;
+    Video: TGroupBox;
     procedure cboVCodecChange(Sender: TObject);
     procedure cboVModeChange(Sender: TObject);
-    procedure chkFResizeChange(Sender: TObject);
     procedure cmdStartClick(Sender: TObject);
     procedure cmdStopClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -107,7 +101,7 @@ begin
   pages.TabIndex:=0;
 end;
 
-{ Status }
+{ Main }
 procedure TForm1.cmdStartClick(Sender: TObject);
 var
   sFile: string;
@@ -212,16 +206,7 @@ begin
   { filtering } {todo}
   if (chkFResize.Checked) then
   begin
-    if (Length(txtFWResize.Text) > 0) then
-    begin
-      sParameters.Add('--width');
-      sParameters.Add(txtFWResize.Text);
-    end;
-    if (Length(txtFHResize.Text) > 0) then
-    begin
-      sParameters.Add('--height');
-      sParameters.Add(txtFHResize.Text);
-    end;
+
   end;
 
   {output}
@@ -293,7 +278,7 @@ begin
     if (FileExistsUTF8(FileNames[iCpt])) then
         lstFiles.Items.Add(FileNames[iCpt]);
   end;
-  pages.TabIndex:=1;
+  pages.TabIndex:=0;
 end;
 
 procedure TForm1.Label13Click(Sender: TObject);
@@ -368,26 +353,11 @@ begin
        0: // Bitrate
        begin
             txtVBitrate.Text := '512';
-            Label3.Caption := 'kbps';
        end;
        1: // Quality
        begin
             txtVBitrate.Text := '24';
-            Label3.Caption := 'Q';
        end;
-  end;
-end;
-
-procedure TForm1.chkFResizeChange(Sender: TObject);
-begin
-  txtFWResize.Enabled:=false;
-  txtFWResize.Text:='';
-  txtFHResize.Enabled:=false;
-  txtFhResize.Text:='';
-  if (chkFResize.Checked) then
-  begin
-    txtFWResize.Enabled:=true;
-    txtFHResize.Enabled:=true;
   end;
 end;
 
