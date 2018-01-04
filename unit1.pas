@@ -16,15 +16,10 @@ type
     cboVProfile: TComboBox;
     cboVTune: TComboBox;
     cboVDenoise: TComboBox;
-    CheckBox1: TCheckBox;
-    chkDXVA2: TCheckBox;
-    chkOpenCL: TCheckBox;
     chkFResize: TCheckBox;
     chkFDeblock: TCheckBox;
     chkFDenoise: TCheckBox;
-    chkSBurn: TCheckBox;
     cboVMode: TComboBox;
-    GroupBox4: TGroupBox;
     Label12: TLabel;
     Label13: TLabel;
     Label14: TLabel;
@@ -198,11 +193,6 @@ begin
   end;
   sParameters.Add(txtVBitrate.Text);
 
-  { advanced }
-  if (chkOpenCL.Checked) then sParameters.Add('--use-opencl');
-  if (chkDXVA2.Checked) then sParameters.Add('--use-hwd');
-  if (chkDXVA2.Checked <> false) then sParameters.Add('--disable-qsv-decoding');
-
   {output}
   sParameters.Add('-o');
   sParameters.Add('"' + makeOutput(sFile) + '"');
@@ -221,8 +211,6 @@ begin
     sParameters.Add('-s');
     sParameters.Add(txtSTrack.Text);
     sCmdLine := sCmdLine + '-s ' + txtSTrack.Text + ' ';
-    if (chkSBurn.Checked) then
-       sParameters.Add('--subtitle-burn');
   end;
 
   { filtering }
@@ -427,7 +415,7 @@ end;
 procedure TForm1.encode_start(sFile: string; sParameters: TStrings);
 begin
   addLog('Encoding: ' + ExtractFileNameOnly(sFile));
-  oProcess.Executable := 'bin/HandBrakeCLI.exe';
+  oProcess.Executable := 'HandBrakeCLI.exe';
   oProcess.Parameters := sParameters;
 
   oProcess.Execute;

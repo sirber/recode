@@ -3152,8 +3152,8 @@ object Form1: TForm1
     Height = 400
     Top = 8
     Width = 496
-    ActivePage = Status
-    TabIndex = 0
+    ActivePage = Settings
+    TabIndex = 2
     TabOrder = 1
     object Status: TTabSheet
       Caption = 'Status'
@@ -3259,9 +3259,13 @@ object Form1: TForm1
           ItemIndex = 0
           Items.Strings = (
             'H264'
+            'H264 (NVENC)'
+            'H264 (QVS)'
             'H265'
+            'H265 (NVENC)'
+            'H265 (QVS)'
             'VP8'
-            'MPEG4'
+            'VP9'
           )
           OnChange = cboVCodecChange
           Style = csDropDownList
@@ -3285,7 +3289,7 @@ object Form1: TForm1
           ParentShowHint = False
           ShowHint = True
           TabOrder = 1
-          Text = '352'
+          Text = '512'
         end
         object Label3: TLabel
           Left = 198
@@ -3333,6 +3337,7 @@ object Form1: TForm1
           ItemHeight = 15
           ItemIndex = 0
           Items.Strings = (
+            'none'
             'film'
             'animation'
             'grain'
@@ -3344,7 +3349,7 @@ object Form1: TForm1
           )
           Style = csDropDownList
           TabOrder = 3
-          Text = 'film'
+          Text = 'none'
         end
         object Label9: TLabel
           Left = 6
@@ -3483,11 +3488,11 @@ object Form1: TForm1
       end
       object Subtitle: TGroupBox
         Left = 244
-        Height = 81
+        Height = 56
         Top = 8
         Width = 233
         Caption = 'Subtitle'
-        ClientHeight = 61
+        ClientHeight = 36
         ClientWidth = 229
         TabOrder = 2
         object Label10: TLabel
@@ -3509,23 +3514,11 @@ object Form1: TForm1
           TabOrder = 0
           Text = '1'
         end
-        object chkSBurn: TCheckBox
-          Left = 7
-          Height = 19
-          Hint = '"Burn" the selected subtitle track into the video track'#13#10'Only one track can be selected.'
-          Top = 36
-          Width = 171
-          Caption = 'burn subtitle in video stream'
-          Enabled = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 1
-        end
       end
       object GroupBox3: TGroupBox
         Left = 244
         Height = 112
-        Top = 96
+        Top = 72
         Width = 233
         Caption = 'Filtering'
         ClientHeight = 92
@@ -3611,40 +3604,6 @@ object Form1: TForm1
           Width = 5
           Caption = 'x'
           ParentColor = False
-        end
-      end
-      object GroupBox4: TGroupBox
-        Left = 244
-        Height = 112
-        Top = 216
-        Width = 233
-        Caption = 'Advanced'
-        ClientHeight = 92
-        ClientWidth = 229
-        TabOrder = 4
-        object chkOpenCL: TCheckBox
-          Left = 7
-          Height = 19
-          Top = 8
-          Width = 177
-          Caption = 'Use OpenCL where applicable'
-          TabOrder = 0
-        end
-        object chkDXVA2: TCheckBox
-          Left = 7
-          Height = 19
-          Top = 32
-          Width = 183
-          Caption = 'Use DXVA2 hardware decoding'
-          TabOrder = 1
-        end
-        object CheckBox1: TCheckBox
-          Left = 7
-          Height = 19
-          Top = 56
-          Width = 177
-          Caption = 'Use Intel QuickSync decoding'
-          TabOrder = 2
         end
       end
     end

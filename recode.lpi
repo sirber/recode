@@ -6,6 +6,7 @@
     <General>
       <MainUnit Value="0"/>
       <Title Value="Recode"/>
+      <Scaled Value="True"/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
       <Icon Value="0"/>
@@ -35,7 +36,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="9">
+    <Units Count="10">
       <Unit0>
         <Filename Value="recode.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -52,7 +53,8 @@
         <UnitName Value="Unit1"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <CursorPos X="38" Y="11"/>
+        <TopLine Value="404"/>
+        <CursorPos X="27" Y="418"/>
         <UsageCount Value="53"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -99,8 +101,16 @@
         <CursorPos X="31" Y="34"/>
         <UsageCount Value="10"/>
       </Unit8>
+      <Unit9>
+        <Filename Value="C:\lazarus\components\lazutils\utf8process.pp"/>
+        <UnitName Value="UTF8Process"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="629"/>
+        <CursorPos Y="642"/>
+        <UsageCount Value="10"/>
+      </Unit9>
     </Units>
-    <JumpHistory Count="3" HistoryIndex="2">
+    <JumpHistory Count="8" HistoryIndex="7">
       <Position1>
         <Filename Value="recode.lpr"/>
         <Caret Line="18" Column="41"/>
@@ -113,6 +123,26 @@
         <Filename Value="unit1.pas"/>
         <Caret Line="13" Column="25"/>
       </Position3>
+      <Position4>
+        <Filename Value="unit1.pas"/>
+        <Caret Line="16" Column="21"/>
+      </Position4>
+      <Position5>
+        <Filename Value="unit1.pas"/>
+        <Caret Line="194" Column="14" TopLine="183"/>
+      </Position5>
+      <Position6>
+        <Filename Value="unit1.pas"/>
+        <Caret Line="197" Column="7" TopLine="184"/>
+      </Position6>
+      <Position7>
+        <Filename Value="unit1.pas"/>
+        <Caret Line="195" TopLine="184"/>
+      </Position7>
+      <Position8>
+        <Filename Value="unit1.pas"/>
+        <Caret Line="212" Column="17" TopLine="144"/>
+      </Position8>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -132,13 +162,10 @@
         <OverflowChecks Value="True"/>
       </Checks>
       <Optimizations>
-        <OptimizationLevel Value="2"/>
+        <OptimizationLevel Value="3"/>
       </Optimizations>
     </CodeGeneration>
     <Linking>
-      <Debugging>
-        <GenerateDebugInfo Value="False"/>
-      </Debugging>
       <Options>
         <Win32>
           <GraphicApplication Value="True"/>

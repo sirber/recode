@@ -13,6 +13,7 @@ uses
 {$R *.res}
 
 begin
+  Application.Scaled:=True;
   Application.Title:='Recode';
   Application.Initialize;
   Application.CreateForm(TForm1, Form1);
