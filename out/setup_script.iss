@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Recode"
-#define MyAppVersion "20130619"
+#define MyAppVersion "20180104"
 #define MyAppPublisher "Detritus Software"
 #define MyAppURL "https://github.com/sirber/recode"
 #define MyAppExeName "recode.exe"
@@ -36,7 +36,10 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "recode.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "HandBrakeCLI.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "bin/ffmpeg.exe"; DestDir: "{app}/bin/"; Flags: ignoreversion
+Source: "bin/libx265_main10.dll"; DestDir: "{app}/bin/"; Flags: ignoreversion
+Source: "bin/nppc64_80.dll"; DestDir: "{app}/bin/"; Flags: ignoreversion
+Source: "bin/nppi64_80.dll"; DestDir: "{app}/bin/"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
