@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 1008
+  Left = 1259
   Height = 436
-  Top = 163
+  Top = 138
   Width = 508
   AllowDropFiles = True
   BorderIcons = [biSystemMenu, biMinimize]
@@ -3130,7 +3130,7 @@ object Form1: TForm1
   OnCreate = FormCreate
   OnDropFiles = FormDropFiles
   Position = poScreenCenter
-  LCLVersion = '1.8.0.5'
+  LCLVersion = '1.8.4.0'
   object StatusBar1: TStatusBar
     Left = 0
     Height = 23
@@ -3407,19 +3407,39 @@ object Form1: TForm1
         object GroupBox3: TGroupBox
           Left = 2
           Height = 64
-          Top = 208
+          Top = 272
           Width = 166
           Caption = 'Filtering'
           ClientHeight = 44
           ClientWidth = 162
           TabOrder = 2
           object chkFResize: TCheckBox
-            Left = 7
+            Left = 6
             Height = 19
-            Top = 11
+            Top = 0
             Width = 52
             Caption = 'Resize'
             Enabled = False
+            TabOrder = 0
+          end
+        end
+        object GroupBox6: TGroupBox
+          Left = 0
+          Height = 48
+          Top = 216
+          Width = 166
+          Caption = 'Subtitles'
+          ClientHeight = 28
+          ClientWidth = 162
+          TabOrder = 3
+          object chkSubs: TCheckBox
+            Left = 7
+            Height = 19
+            Top = 0
+            Width = 75
+            Caption = 'Copy subs'
+            Checked = True
+            State = cbChecked
             TabOrder = 0
           end
         end
@@ -3524,7 +3544,7 @@ object Form1: TForm1
   end
   object oProcess: TAsyncProcess
     Active = False
-    Options = [poNoConsole]
+    Options = [poUsePipes, poStderrToOutPut]
     Priority = ppIdle
     StartupOptions = []
     ShowWindow = swoHIDE
@@ -3535,6 +3555,7 @@ object Form1: TForm1
     WindowTop = 0
     WindowWidth = 0
     FillAttribute = 0
+    OnReadData = oProcessReadData
     OnTerminate = oProcessTerminate
     left = 440
     top = 8

@@ -20,6 +20,7 @@ type
     cboVPreset: TComboBox;
     cboVTune: TComboBox;
     chkFResize: TCheckBox;
+    chkSubs: TCheckBox;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
     GroupBox3: TGroupBox;
@@ -60,6 +61,7 @@ type
     procedure Label14Click(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
+    procedure oProcessReadData(Sender: TObject);
     procedure oProcessTerminate(Sender: TObject);
   private
     { private declarations }
@@ -125,6 +127,8 @@ begin
   { input / output }
   sParameters.Add('-i');
   sParameters.Add('"' + sFile + '"');
+
+  sParameters.Add('-y');
 
   {video}
   sParameters.Add('-c:v');
@@ -200,17 +204,18 @@ begin
   sParameters.Add('-ac');
   sParameters.Add('2');
 
-  { subtitle } {copy}
-  sParameters.Add('-c:s copy');
+  if (chkSubs.Checked) then
+  begin
+      sParameters.Add('-c:s');
+      sParameters.Add('copy');
+  end;
 
-  { filtering } {todo}
   if (chkFResize.Checked) then
   begin
 
   end;
 
   {output}
-  sParameters.Add('-y');
   sParameters.Add('"' + makeOutput(sFile) + '"');
 
   Clipboard.AsText := sParameters.Text;
@@ -234,6 +239,8 @@ begin
     sOutput := sOutput + '.mkv';
     sOutput := StringReplace(sOutput, '{source}', ExtractFilePath(sFile), [rfIgnoreCase]);
 
+    sOutput := stringreplace(sOutput, '\\', '\', [rfReplaceAll, rfIgnoreCase]);
+
     if (FileExists(sOutput)) then
     begin
       // File exists, add suffix
@@ -251,7 +258,7 @@ begin
   oProcess.Terminate(1);
   cmdStop.Enabled:=false;
   cmdStart.Enabled:=true;
-  updateStatus('aborted');
+  // updateStatus('aborted');
 end;
 
 procedure TForm1.addLog(sMessage: string);
@@ -308,6 +315,19 @@ begin
   end
   else
     lstFiles.Clear;
+end;
+
+procedure TForm1.oProcessReadData(Sender: TObject);
+var
+  aOutput: TStringList;
+begin
+  aOutput := TStringList.Create();
+  aOutput.LoadFromStream(oProcess.Output);
+  if (aOutput.Count > 0) then
+  begin
+    updateStatus(aOutput.Strings[aOutput.Count - 1]);
+    mmoHelp.Lines.AddStrings(aOutput);
+  end;
 end;
 
 { Settings }
@@ -378,7 +398,7 @@ procedure TForm1.oProcessTerminate(Sender: TObject);
 begin
   if (oProcess.ExitStatus <> 0) then
   begin
-    addLog('> error.');
+    addLog('> error #' + oProcess.ExitStatus.ToString);
     cmdStopClick(Sender);
     Exit;
   end;
