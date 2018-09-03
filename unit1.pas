@@ -77,7 +77,7 @@ var
   Form1: TForm1;
 
 const
-  sVersion: string = '2018-01-04 x64 dev';
+  sVersion: string = '2018-09-03 x64 dev';
 
 implementation
 
