@@ -3260,7 +3260,7 @@ object Form1: TForm1
           ClientWidth = 162
           TabOrder = 0
           object cboVCodec: TComboBox
-            Left = 57
+            Left = 56
             Height = 23
             Top = 0
             Width = 100
@@ -3268,11 +3268,13 @@ object Form1: TForm1
             ItemIndex = 0
             Items.Strings = (
               'H264'
-              'H264 (NVENC)'
-              'H264 (QSV)'
+              'H264 (nvidia)'
+              'H264 (amd)'
+              'H264 (intel)'
               'H265'
-              'H265 (NVENC)'
-              'H265 (QSV)'
+              'H265 (nvidia)'
+              'H265 (amd)'
+              'H265 (intel)'
               'VP8'
               'VP9'
             )
@@ -3298,7 +3300,7 @@ object Form1: TForm1
             ParentShowHint = False
             ShowHint = True
             TabOrder = 1
-            Text = '512'
+            Text = '2048'
           end
           object cboVPreset: TComboBox
             Left = 57
@@ -3419,8 +3421,27 @@ object Form1: TForm1
             Top = 0
             Width = 52
             Caption = 'Resize'
-            Enabled = False
+            OnChange = chkFResizeChange
             TabOrder = 0
+          end
+          object cboFResize: TComboBox
+            Left = 72
+            Height = 23
+            Top = -4
+            Width = 85
+            Enabled = False
+            ItemHeight = 15
+            ItemIndex = 2
+            Items.Strings = (
+              '240p'
+              '480p'
+              '720p'
+              '1080p'
+            )
+            OnChange = cboFResizeChange
+            Style = csDropDownList
+            TabOrder = 1
+            Text = '720p'
           end
         end
         object GroupBox6: TGroupBox

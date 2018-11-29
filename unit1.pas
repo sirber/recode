@@ -21,11 +21,13 @@ type
     cboVTune: TComboBox;
     chkFResize: TCheckBox;
     chkSubs: TCheckBox;
+    cboFResize: TComboBox;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
     GroupBox3: TGroupBox;
     GroupBox4: TGroupBox;
     GroupBox5: TGroupBox;
+    GroupBox6: TGroupBox;
     Label1: TLabel;
     Label13: TLabel;
     Label14: TLabel;
@@ -53,8 +55,10 @@ type
     Video: TGroupBox;
     procedure cboVCodecChange(Sender: TObject);
     procedure cboVModeChange(Sender: TObject);
+    procedure chkFResizeChange(Sender: TObject);
     procedure cmdStartClick(Sender: TObject);
     procedure cmdStopClick(Sender: TObject);
+    procedure cboFResizeChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDropFiles(Sender: TObject; const FileNames: array of String);
     procedure Label13Click(Sender: TObject);
@@ -77,7 +81,7 @@ var
   Form1: TForm1;
 
 const
-  sVersion: string = '2018-09-03 x64 dev';
+  sVersion: string = '2018-11-28 x64 dev';
 
 implementation
 
@@ -124,6 +128,10 @@ begin
   { make cmdline }
   sFile := lstFiles.Items.Strings[0];
 
+  // test
+  sParameters.Add('-hwaccel');
+  sParameters.Add('dxva2');
+
   { input / output }
   sParameters.Add('-i');
   sParameters.Add('"' + sFile + '"');
@@ -131,6 +139,7 @@ begin
   sParameters.Add('-y');
 
   {video}
+
   sParameters.Add('-c:v');
   case cboVCodec.ItemIndex of
     0: // x264
@@ -144,11 +153,15 @@ begin
            sParameters.Add(cboVTune.Items.Strings[cboVTune.ItemIndex]);
       end;
     end;
-    1: // H264 (NVENC)
+    1: // H264 (nvidia)
     begin
       sParameters.Add('h264_nvenc');
     end;
-    2: // H264 (qsv)
+    2: // H264 (amd)
+    begin
+      sParameters.Add('h264_amf');
+    end;
+    3: // H264 (intel)
     begin
       sParameters.Add('h264_qsv');
       sParameters.Add('-preset');
@@ -156,25 +169,29 @@ begin
       sParameters.Add('-look_ahead');
       sParameters.Add('0');
     end;
-    3: // x265
+    4: // x265
     begin
       sParameters.Add('libx265');
       sParameters.Add('--encoder-preset');
       sParameters.Add(cboVPreset.Items.Strings[cboVPreset.ItemIndex]);
     end;
-    4: // H265 (NVENC)
+    5: // H265 (nvidia)
     begin
       sParameters.Add('hevc_nvenc');
     end;
-    5: // H265 (qsv)
+    6: // H265 (amd)
+    begin
+      sParameters.Add('hevc_amf');
+    end;
+    7: // H265 (intel)
     begin
       sParameters.Add('hevc_qsv');
     end;
-    6: // vp8
+    8: // vp8
     begin
       sParameters.Add('libvpx');
     end;
-    7: // vp9
+    9: // vp9
     begin
       sParameters.Add('libvpx-vp9');
     end;
@@ -198,9 +215,10 @@ begin
   sParameters.Add('-b:a');
   sParameters.Add( Concat(txtABitrate.Text, 'K') );
   sParameters.Add('-c:a');
-  sParameters.Add('libfdk_aac');
-  sParameters.Add('-profile:a');
-  sParameters.Add('aac_he_v2');
+  if (StrtoInt(txtABitrate.Text) >= 128) then
+       sParameters.Add('aac')
+  else
+       sParameters.Add('libopus');
   sParameters.Add('-ac');
   sParameters.Add('2');
 
@@ -212,7 +230,13 @@ begin
 
   if (chkFResize.Checked) then
   begin
-
+       sParameters.Add('-vf');
+       case cboFResize.ItemIndex of
+         0: sParameters.Add('scale=-2:240');
+         1: sParameters.Add('scale=-2:480');
+         2: sParameters.Add('scale=1280:-2');
+         3: sParameters.Add('scale=1920:-2');
+       end;
   end;
 
   {output}
@@ -259,6 +283,11 @@ begin
   cmdStop.Enabled:=false;
   cmdStart.Enabled:=true;
   // updateStatus('aborted');
+end;
+
+procedure TForm1.cboFResizeChange(Sender: TObject);
+begin
+
 end;
 
 procedure TForm1.addLog(sMessage: string);
@@ -379,6 +408,11 @@ begin
             txtVBitrate.Text := '24';
        end;
   end;
+end;
+
+procedure TForm1.chkFResizeChange(Sender: TObject);
+begin
+  cboFResize.Enabled := chkFResize.Checked;
 end;
 
 { About }
