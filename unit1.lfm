@@ -3212,6 +3212,7 @@ object Form1: TForm1
           Width = 274
           ItemHeight = 0
           PopupMenu = pmFiles
+          ScrollWidth = 800
           TabOrder = 0
         end
         object GroupBox2: TGroupBox
@@ -3277,6 +3278,7 @@ object Form1: TForm1
               'H265 (intel)'
               'VP8'
               'VP9'
+              'AV1'
             )
             OnChange = cboVCodecChange
             Style = csDropDownList
@@ -3369,7 +3371,7 @@ object Form1: TForm1
             ItemIndex = 0
             Items.Strings = (
               'Bitrate'
-              'Quality'
+              'Avg Quality'
             )
             OnChange = cboVModeChange
             Style = csDropDownList
@@ -3438,7 +3440,6 @@ object Form1: TForm1
               '720p'
               '1080p'
             )
-            OnChange = cboFResizeChange
             Style = csDropDownList
             TabOrder = 1
             Text = '720p'

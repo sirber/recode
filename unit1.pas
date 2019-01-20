@@ -58,7 +58,6 @@ type
     procedure chkFResizeChange(Sender: TObject);
     procedure cmdStartClick(Sender: TObject);
     procedure cmdStopClick(Sender: TObject);
-    procedure cboFResizeChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDropFiles(Sender: TObject; const FileNames: array of String);
     procedure Label13Click(Sender: TObject);
@@ -81,7 +80,7 @@ var
   Form1: TForm1;
 
 const
-  sVersion: string = '2018-11-28 x64 dev';
+  sVersion: string = '2018-12-19 x64 dev';
 
 implementation
 
@@ -128,7 +127,7 @@ begin
   { make cmdline }
   sFile := lstFiles.Items.Strings[0];
 
-  // test
+  { test }
   sParameters.Add('-hwaccel');
   sParameters.Add('dxva2');
 
@@ -166,8 +165,6 @@ begin
       sParameters.Add('h264_qsv');
       sParameters.Add('-preset');
       sParameters.Add(cboVPreset.Items.Strings[cboVPreset.ItemIndex]);
-      sParameters.Add('-look_ahead');
-      sParameters.Add('0');
     end;
     4: // x265
     begin
@@ -194,6 +191,14 @@ begin
     9: // vp9
     begin
       sParameters.Add('libvpx-vp9');
+      sParameters.Add('-tile-columns');
+      sParameters.Add('4');
+    end;
+    10: // av1
+    begin
+      sParameters.Add('av1');
+      sParameters.Add('-tile-columns');
+      sParameters.Add('4');
     end;
   end;
 
@@ -206,6 +211,8 @@ begin
     end;
     1: // quality
     begin
+      sParameters.Add('-b:v');
+      sParameters.Add('0');
       sParameters.Add('-crf');
       sParameters.Add(txtVBitrate.Text);
     end;
@@ -285,11 +292,6 @@ begin
   // updateStatus('aborted');
 end;
 
-procedure TForm1.cboFResizeChange(Sender: TObject);
-begin
-
-end;
-
 procedure TForm1.addLog(sMessage: string);
 var
   sDate: string;
@@ -355,7 +357,7 @@ begin
   if (aOutput.Count > 0) then
   begin
     updateStatus(aOutput.Strings[aOutput.Count - 1]);
-    mmoHelp.Lines.AddStrings(aOutput);
+    // mmoHelp.Lines.AddStrings(aOutput);
   end;
 end;
 
