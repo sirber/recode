@@ -80,7 +80,7 @@ var
   Form1: TForm1;
 
 const
-  sVersion: string = '2018-12-19 x64 dev';
+  sVersion: string = '2019-02-05 x64 ffmpeg dev';
 
 implementation
 
@@ -169,7 +169,7 @@ begin
     4: // x265
     begin
       sParameters.Add('libx265');
-      sParameters.Add('--encoder-preset');
+      sParameters.Add('-preset');
       sParameters.Add(cboVPreset.Items.Strings[cboVPreset.ItemIndex]);
     end;
     5: // H265 (nvidia)
@@ -370,27 +370,27 @@ begin
       cboVPreset.Enabled := true;
       cboVTune.Enabled := true;
     end;
-    1: // h264 nvenc
+    1,3: // h264 nvenc amd
     begin
       cboVPreset.Enabled := false;
       cboVTune.Enabled := false;
     end;
-    2: // h264_qsv
+    2: // h264 qsv
     begin
       cboVPreset.Enabled := true;
       cboVTune.Enabled := false;
     end;
-    3: // x265
+    4: // x265
     begin
       cboVPreset.Enabled := true;
       cboVTune.Enabled := false;
     end;
-    4,5: // h265 hw
+    5,6: // h265 hw
     begin
       cboVPreset.Enabled := false;
       cboVTune.Enabled := false;
     end;
-    6,7: // vp8, vp9
+    7,8: // vp8, vp9
     begin
       cboVPreset.Enabled := false;
       cboVTune.Enabled := false;
