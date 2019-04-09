@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Recode"
-#define MyAppVersion "20180104"
+#define MyAppVersion "20190205"
 #define MyAppPublisher "Detritus Software"
 #define MyAppURL "https://github.com/sirber/recode"
 #define MyAppExeName "recode.exe"

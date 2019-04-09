@@ -194,11 +194,15 @@ begin
       sParameters.Add('-tile-columns');
       sParameters.Add('4');
     end;
-    10: // av1
+    10: // av1 https://trac.ffmpeg.org/wiki/Encode/AV1
     begin
-      sParameters.Add('av1');
-      sParameters.Add('-tile-columns');
-      sParameters.Add('4');
+      sParameters.Add('libaom-av1');
+      sParameters.Add('-strict');
+      sParameters.Add('experimental');
+      sParameters.Add('-row-mt');
+      sParameters.Add('1');
+      sParameters.Add('-tiles');
+      sParameters.Add('2x2');
     end;
   end;
 
@@ -218,7 +222,7 @@ begin
     end;
   end;
 
-  { audio } { forced he-aac v2 }
+  { audio } { AAC for 128kbps+, opus otherwise. 2 channels}
   sParameters.Add('-b:a');
   sParameters.Add( Concat(txtABitrate.Text, 'K') );
   sParameters.Add('-c:a');
