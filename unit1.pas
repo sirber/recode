@@ -80,7 +80,7 @@ var
   Form1: TForm1;
 
 const
-  sVersion: string = '2019-02-05 x64 ffmpeg dev';
+  sVersion: string = '2019-05-125 x64 ffmpeg dev';
 
 implementation
 
@@ -151,20 +151,38 @@ begin
            sParameters.Add('-tune');
            sParameters.Add(cboVTune.Items.Strings[cboVTune.ItemIndex]);
       end;
+      sParameters.Add('-profile:v'); // ChromeCast compatible
+      sParameters.Add('high');
+      sParameters.Add('-level');
+      sParameters.Add('4.2');
     end;
-    1: // H264 (nvidia)
+    1: // H264 (nvidia) https://superuser.com/questions/1296374/best-settings-for-ffmpeg-with-nvenc
     begin
       sParameters.Add('h264_nvenc');
+      sParameters.Add('-profile:v');
+      sParameters.Add('high');
+      sParameters.Add('-level');
+      sParameters.Add('4.2');
     end;
-    2: // H264 (amd)
+    2: // H264 (amd) https://stackoverflow.com/questions/45181730/ffmpeg-encode-x264-with-amd-gpu-on-windows
     begin
       sParameters.Add('h264_amf');
+      sParameters.Add('-profile:v');
+      sParameters.Add('high');
+      sParameters.Add('-level');
+      sParameters.Add('4.2');
+      sParameters.Add('-quality');
+      sParameters.Add('2'); // prefer quality
     end;
     3: // H264 (intel)
     begin
       sParameters.Add('h264_qsv');
       sParameters.Add('-preset');
       sParameters.Add(cboVPreset.Items.Strings[cboVPreset.ItemIndex]);
+      sParameters.Add('-profile:v');
+      sParameters.Add('high');
+      sParameters.Add('-level');
+      sParameters.Add('4.2');
     end;
     4: // x265
     begin
@@ -374,12 +392,12 @@ begin
       cboVPreset.Enabled := true;
       cboVTune.Enabled := true;
     end;
-    1,3: // h264 nvenc amd
+    1,2: // h264 nvenc amd
     begin
       cboVPreset.Enabled := false;
       cboVTune.Enabled := false;
     end;
-    2: // h264 qsv
+    3: // h264 qsv
     begin
       cboVPreset.Enabled := true;
       cboVTune.Enabled := false;
@@ -389,12 +407,12 @@ begin
       cboVPreset.Enabled := true;
       cboVTune.Enabled := false;
     end;
-    5,6: // h265 hw
+    5,6,7: // h265 nvenc amd qvs
     begin
       cboVPreset.Enabled := false;
       cboVTune.Enabled := false;
     end;
-    7,8: // vp8, vp9
+    8,9,10: // vp8, vp9, av1
     begin
       cboVPreset.Enabled := false;
       cboVTune.Enabled := false;
